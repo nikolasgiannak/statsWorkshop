@@ -1,0 +1,335 @@
+---
+  title: "Research Skills Course - Statistics Workshop"
+author: "Nikolas Giannakis & Florent Petitprez"
+date: "January / February 2023"
+output:
+  html_document:
+  toc: true
+toc_float: true
+code_folding: show
+lang: "en"
+---
+  
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+The objective of this workshop is to introduce statistics and data analysis using the R programming language. We will start by exploring what R is and to use it as a calculator, then we will analyse the *penguins* dataset.
+
+### The Rstudio interface
+
+Throughout this workshop, we will Rstudio. Rstudio is an *integrated development environment*, a software that includes everything we need to use R comfortably. Here's a overview of the interface.
+
+![](images/image-214251958.png)
+
+<br>
+
+The Rstudio interface you have in front of you is divided in 4 parts:\
+
+1.  Upper left: the script area. Here you can write several lines of code. To execute a bit of code written here, either select it and click on Run, or click on the line and press Ctrl + ↵
+
+2.  Lower left: the is the R console. Here can enter single commands. All executed commands (including those ran from the scipt area) will be sent here, and R responses will be displayed here.
+
+3.  Upper right: the environment panel. In this panel. This shows everything that has already been stored in the environment: data, variables, ...
+
+4.  Lower right: file browser, plots, help on functions, ...
+
+<br>
+
+### Files and working directory
+
+All the necessary files are included in the folder we've provided to you, called `StatsWorkshop`.
+We will work inside this folder and define it as our *working directory*, 
+meaning that everything that we will generate and read will be from this place.
+Using the Files panel in Rstudio, navigate to inside this folder. 
+Then click on "More" on the top of this panel, then "Set as working directory".
+You will notice that a command has appeared in the console panel:
+clicking on set as working directory has instructed Rstudio to run a `setwd` command. 
+This is in fact another way to set the working directory, by executing a command `setwd("PATH/TO/THE/DIRECTORY")`.
+If we want a reminder of where R is currently working, we can request to know the working directory with the command `getwd()`.
+
+<br>
+  
+## Module 1: R as a calculator and programming basics
+
+![Trust me, it can be a bit more impressive than that](images/image-125835384.png)
+
+<br>In this module, we will see how we can use R as a (quite powerful) calculator and learn some basics of coding in R that will be necessary for the rest of the workshop.
+
+$$
+\\[1cm]
+$$
+
+### 1.1. Basic Operations
+
+The console of R can be used as a basic calculator. For example, we can type the following commands, and R will compute and display the result.
+
+```{r calculator1}
+3+2
+2+3*5
+(2+3)*5
+42*123
+(15+3)/(143.7-17)
+2^11
+```
+
+<br>R also knows standard function like square root (`sqrt`), exponential (`exp`) or base 10 logarithm (`log10`).
+
+```{r calculator5}
+sqrt(125)
+exp(10)
+log10(1000)
+```
+
+#### Exercise 1
+
+What are the values of the following?
+
+$$
+log_{10}\left(9+{{2+3}\over{10-5}}\right)
+$$
+
+$$
+\sqrt{5^3 + 3 \times 7 - 2}
+$$
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r correction1, class.source = 'fold-hide', collapse=TRUE}
+log10(9+(2+3)/(10-5))
+sqrt(5^3+3*7-2)
+```
+
+$$
+\\[1cm]
+$$
+
+### 1.2. Variables
+
+R can store values in *variables*. They are assigned using the symbol `<-`.
+
+```{r variables}
+a <- 3
+b <- 5
+a*b
+```
+
+<br>Variables can be overwritten:
+
+```{r overwriteVars}
+a <- 42
+b <- a-40
+a
+b
+a <- 3
+a
+b
+```
+
+Note that in the above example, overwriting `a` did not change the value of `b`: R does not go back to rerun older lines of code!
+
+<br>You can name your variables with whatever name you want, with a few exceptions that are protected names. Do not hesitate to give long, clear names to your variables. R is a case-sensitive language, which means that `thisvariable`, `ThisVariable` and `THISVARIABLE` will all be considered to be different names.
+
+Importantly, variables can have different types. Such types include:
+
+-   Integer, *e.g.* `3`
+
+-   Numeric, *e.g.* `-3.14`
+
+-   Character, *e.g.* `"This is a character"`. They are defined between quotes, either `"double"` or `'simple'`.
+
+-   Logical, being either `TRUE` or `FALSE`. We will cover these in more details in the next section.
+
+There are other types, but these will be the most frequent ones. Note that not all operations are possible on all types:
+
+```{r additionCharacters, error = TRUE}
+character1 <- "Trying to"
+character2 <- "add characters."
+character1 + character2
+```
+
+<br>*Note: if you want to concatenate characters, the function to do so is called* `paste`*:*
+
+```{r paste}
+character1 <- "Pasting characters"
+character2 <- "works much better."
+paste(character1, character2)
+```
+
+<br>We will often need not only one value, but a set of values. To do so, we can create *vectors* using `c()`. The `i`-th value in the vector `v` can be accessed using `v[i]`.
+
+```{r}
+v <- c(1,3,5,7,9)
+v
+
+v[3]
+```
+
+<br>Vectors can contain any type of variable. However, they can only contain variables that are from the same type. If you want to group variables of different types, you need to use a structure called *lists*, but we do not have the time to cover them in this workshop.
+
+Special case: if you want all integer values between two numbers, there is a shortcut: `start:end`.
+
+```{r}
+numberSequence <- 3:103
+numberSequence
+```
+
+$$
+\\[1cm]
+$$
+
+### 1.3. Logical and 'if' statement
+
+We can create some variables that are called *logical* or *booleans*. This means that they can take only two values: `TRUE` or `FALSE`, sometimes coded as 1 and 0. These names are protected in R so you cannot override them by creating a variable with these names. There are specific operations that we can make on logical variables:
+
+-   **x AND y** returns TRUE if both x and y are TRUE, returns FALSE otherwise
+
+-   **x OR y** returns TRUE if at least one of x or y is TRUE, returns FALSE if both x and y are FALSE
+
+-   **NOT x** returns the opposite of x: FALSE if is TRUE, TRUE if x is FALSE
+
+In R, AND is coded by `&`, OR is coded by `|` (above the `\` symbol on the keyboard) and not is coded by `!`.
+
+```{r logicalExample}
+t <- TRUE
+f <- FALSE
+t & f
+t | f
+!t
+!f
+```
+
+<br>
+
+#### Exercise 2
+
+with t being defined as `TRUE` and f as `FALSE` (as above), what do the following evaluate to?
+
+t AND NOT f
+
+NOT (t OR f)
+
+((NOT t) OR f) AND t
+
+Before you evaluate them in R, try to see if you can figure them out by yourself.
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r correction2, class.source = 'fold-hide', collapse=TRUE}
+t <- TRUE
+f <- FALSE
+t & !f
+!(t | f)
+((!t) | f) & t
+```
+
+We can evaluate whether two variable have the same value with `==` or if they are different with `!=`. These operations return logical values:
+
+```{r}
+a <- 3
+a == 5
+b <- 7
+a != b
+```
+
+<br>The logical variables can be used to run bits of code only when a certain condition is met. To do so, we can use the `if() else` structure:
+
+```{r, eval=FALSE}
+if(CONDITION){*CODE TO RUN IF THE CONDITION IS MET*} else{*CODE TO RUN IF THE CONDITION IS NOT MET*}
+```
+
+Note that the `else{}` statement is optional, and we can remove it if we don not need anything to be done if the condition is not met. Here is an example:
+
+```{r}
+a <- 10
+if(a==10){print("a is 10")} else{print("a is not 10")}
+
+a <- 5
+if(a==10){print("a is 10")} else{print("a is not 10")}
+
+a <- 3
+if(a > 2){a = a-1}
+a
+```
+
+$$
+\\[1cm]
+$$
+
+### 1.4. Loops
+
+When we need a part of the code to be run several times, there is no need to copy and paste the same chunk of code several times (imagine if you need to run it 100,000 times!). There are structures called *loops*. The most frequent one is the for loop, which follows this structure:
+
+```{r, eval=FALSE}
+for(variable in SET OF VALUES){
+  CODE TO BE RUN MULTIPLE TIMES,
+  ONE FOR EACH VALUE IN SET OF VALUES
+  THIS CODE CAN USE variables
+}
+```
+
+<br>Here are a few examples:
+
+```{r}
+for(a in c(1,3,5,7,9)){
+  print(a)
+}
+
+count <- 0
+for(loop in 1:10){
+  count <- count +1
+}
+count
+
+sentence <- ""
+for(word in c("One","word","at","a","time.")){
+  sentence <- paste(sentence,word)
+}
+sentence
+```
+
+<br>
+
+#### Exercise 3
+
+Write a loop that prints every number form 1 to 15 but that replaces 3 and 9 by `"foo"` and 5 and 10 by `"bar"`, giving the following output:
+
+```{r, echo=FALSE}
+for(number in 1:15){ # loop on all numbers from 1 to 15
+  toPrint <- number # by default, we will need to print the number we are at
+  if(number == 3 | number == 9){toPrint <- "foo"} # replace 3 and 9 by "foo"
+  if(number == 5 | number == 10){toPrint <- "bar"} # replace 5 and 10 by "bar"
+  print(toPrint) # print result
+}
+```
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+for(number in 1:15){ # loop on all numbers from 1 to 15
+  toPrint <- number # by default, we will need to print the number we are at
+  if(number == 3 | number == 9){toPrint <- "foo"} # replace 3 and 9 by "foo"
+  if(number == 5 | number == 10){toPrint <- "bar"} # replace 5 and 10 by "bar"
+  print(toPrint) # print result
+}
+```
+
+$$
+\\[1cm]
+$$
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
