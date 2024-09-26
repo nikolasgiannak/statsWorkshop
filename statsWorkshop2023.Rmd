@@ -476,7 +476,86 @@ $$
 \\[1cm]
 $$
 
-  
+### 2.3. Subsetting the dataset
+
+Perhaps we don't want to look at all available penguins but maybe we are only interested in Adelie penguins. For this and many different analyses, we will need to only look at a subet of the dataset. There are several ways to do so. The first one is using the subset() function:
+
+```{r}
+adelie <- subset(penguins, species=="Adelie")
+table(species = adelie$species, island = adelie$island)
+```
+
+If we want to specify several possible value, can use the constructor `%in%`:
+
+```{r}
+biscoeDream <- subset(penguins, island %in% c("Biscoe","Dream"))
+table(species = adelie$species, island = adelie$island)
+```
+
+We can also put several conditions:
+
+```{r}
+malesTorgersen <- subset(penguins, island == "Torgersen" & sex == "Male")
+table(sex = adelie$sex, island = adelie$island)
+```
+
+<br> Another way to subset the data is to use the `filter()` function from the package `dplyr`. It works similarly to `subset()`.
+
+```{r, echo=T, results='hide'}
+library(dplyr)
+```
+
+```{r}
+adelieFemales <- filter(penguins, species == "Adelie", sex == "female")
+```
+
+<br>
+
+We can also specify directly which lines and/or columns to keep. To do so, we use the structure `dataframe[lines, columns]`. If either lines or columns are left empty, this means that we want to keep all lines or columns, respectively. We can specify which lines / columns to keep either by giving a vector of logicals, numbers, or names:
+
+```{r}
+subset <- penguins[penguins$island == "Biscoe", c("species","island","body_mass_g")] #keep only lines that have "Biscoe" as island, and keep only columns "species", "island" and "body_mass_g"
+subset <- penguins[25:40,] # keep only lines 25 to 40, and all columns
+```
+
+<br>
+
+Another way to subset the data is to use the `filter()` function from the package `dplyr`. It works similarly to `subset()`.
+
+```{r, echo=T, results='hide'}
+library(dplyr)
+```
+
+```{r}
+adelieFemales <- filter(penguins, species == "Adelie", sex == "female")
+```
+
+<br>
+
+#### Exercise 5
+
+Using `table()` or `summary()` on a subset of the penguins data frame, find out the answer to the following questions:
+
+1.  What is the mean body weight of female Gentoo penguins?
+
+2.  What is the smallest observed flipper length for Chinstrap penguins in 2007?
+
+3.  How many Adelie penguins weighing less than 4,000 g were observed on Dream Island?
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+summary(subset(penguins,sex=="female" & species == "Gentoo"))
+# Mean body mass: 4680g 
+summary(subset(penguins,year==2007 & species == "Chinstrap"))
+# Minimum flipper length: 178.8mm
+table(penguins[penguins$species=="Adelie" & penguins$body_mass_g < 4000, "island"])
+# 42 Adelie penguins weighing less than 4,000g on Dream island
+```
+
+$$
+\\[1cm]
+$$
   
   
   
