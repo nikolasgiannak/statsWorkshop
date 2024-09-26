@@ -351,6 +351,32 @@ $$
 \\[3cm]
 $$
 
+## Module 2: First look at the penguins
+
+![Three penguins species! Artwork by \@allison_horst](images/image-1290573199.png)
+
+<br> During the rest of the workshop, we will analyze an example dataset, that lists measurements of penguins observed in the Palmer Archipelago (Antarctica) by Dr Kristen Gorman (University of Alaska). For each animal included in the dataset, we have access to:
+
+-   Its species
+
+-   The island it was observed on
+
+-   The length and depth of it bill (see illustration below)
+
+-   Its flipper length
+
+-   Its body mass
+
+-   Its sex
+
+-   The year it was observed
+
+![Just in case you are not a professional ornithologist. Artwork by \@allison_horst](images/image-958142444.png)
+
+$$
+\\[1cm]
+$$
+
   
   
   
