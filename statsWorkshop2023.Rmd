@@ -946,7 +946,182 @@ $$
 \\[3cm]
 $$
 
+## Module 5: Principal Components Analysis and Clustering
 
+### 5.1. Principal Component Analysis
+
+PCA (Principal Component Analysis) is a dimensionality-reducction method, which is used to reduce the dimensionality of very large datasets.
+<br> It transforms a large set of variables in to a smaller one that retains most of the information of a complex dataset.
+
+
+```{r}
+penguins <- read.table("<path/to/file>",sep = ",", header = T)
+penguins = na.omit(penguins)
+#subset data with numerical values to be used in the PCA analysis.
+# One way to do this, is by using the subset function
+PCA.data =  subset(penguins, select = c("bill_length_mm","bill_depth_mm","flipper_length_mm" ,"body_mass_g"))
+
+#another way to do  it is by using the dplyr package
+library(dplyr)
+PCA.dplyr = penguins |> select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
+
+#Next step is to remove any NA values
+#PCA.data = na.omit(PCA.data)
+PCA.dplyr = na.omit(PCA.dplyr)
+
+#next we will perform the PCA analysis using the prcomp function, and summarise the results
+PCA.results = prcomp(PCA.data, center = TRUE, scale = TRUE)
+summary(PCA.results)
+plot(PCA.results)
+biplot(PCA.results)
+plot(PCA.results$x[,1], PCA.results$x[,2])
+#plot results
+library(ggfortify)
+autoplot(PCA.results)
+autoplot(PCA.results, data = penguins, colour = 'species')
+         
+#another way to perform the PCA analysis is by using functions from the factorextra and factorminer packages
+library(factoextra)
+library(FactoMineR)
+PCA.results2 = PCA(PCA.data, graph = T)
+
+fviz_screeplot(PCA.results2)
+```
+
+$$
+\\[1cm]
+$$
+
+### 5.2. What is clustering?
+
+Consider clustering a task in which data points are divided into  a number of groups such as the points of a group are more similar to each other than the ones that participate in different groups.
+<br> In other words, clustering seperates points/groups with similar attributes, from the ones that have different characteristics and assigns them into clusters.
+<br> Various types of clustering include:
+
+1. Centroid-based clustering (k-means)
+
+2. Density-based clustering
+
+3. Distribution-based clustering
+
+4. Hierarchical clustering
+
+  
+$$
+\\[1cm]
+$$
+
+### 5.3. k-means clustering
+
+k-means clustering is considered one of the simplest clustering algorithms, that groups together certain data with a member of that certain group than with another group. "k" is the number of groups that we cluster our data points, while "mean" refers to the center of the data in that group.
+```{r}
+#prepare the data for which we want to perform the clustering
+#k.data = penguins |> na.omit(penguins) |> select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, species) |> scale()
+penguins.clean = na.omit(penguins)
+
+#run k-means clustering for different k's and visualise it
+
+k3 <- kmeans(penguins.clean[,3:6], centers = 3)
+
+# put en extra column at the k.data, which will show the cluster it is assigned
+k3.penguinData = data.frame(cluster = k3$cluster, penguins.clean)
+
+#In which cluster to the different species belong
+ggplot(k3.penguinData, aes(x = cluster)) +
+  geom_bar(aes(fill = species)) +
+  theme_bw()
+
+ggplot(k3.penguinData, aes(x = cluster)) +
+  geom_bar(aes(fill = island)) +
+  theme_bw()
+
+k2 <- kmeans(penguins.clean[,3:6], centers = 2)
+k4 <- kmeans(penguins.clean[,3:6], centers = 4)
+
+# we will use factoextra package to compute the ideal number of k  and visualize the clusters
+
+plot_k3 = fviz_cluster(k3, geom = "point", data = penguins.clean[,3:6])
+plot_k2 = fviz_cluster(k2, geom = "point", data = penguins.clean[,3:6])
+plot_k4 =  fviz_cluster(k4, geom = "point", data = penguins.clean[,3:6])
+plot_k3
+plot_k2
+plot_k4
+
+
+#calculate the optimal number of k's
+# Elbow method
+fviz_nbclust(penguins.clean[,3:6], kmeans, method = "wss")
+# Silhouette
+fviz_nbclust(penguins.clean[,3:6], kmeans, method = "silhouette")
+
+```
+$$
+\\[1cm]
+$$
+
+### 5.4. Hierarchical clustering
+
+Hierarchical clustering is a technique that can be divided into two categories:
+
+1. Agglomerative hierarchical clustering (commonly used)
+
+Here, iniatially data points are considered an individual cluster, and at each iteration, similar clusters (data points) are merged together with other similar clusters  until one cluster remains.
+
+2. Divisive hierarchical clustering
+
+Here, this technique considers all the data points a single cluster, and in each iteration, data points are seperated from the cluster, which are not similar. This is a procedure that continues till we are left with n number of clusters.
+
+To visualize hierarchical clustering, we use dendrograms, which are tree-like diagrams. In these, the sequences of merges or splits is recorded.
+
+
+```{r}
+#prepare our dataset, removing NA values
+penguins <- penguins |> filter(!is.na(bill_length_mm), !is.na(bill_depth_mm), !is.na(flipper_length_mm), !is.na(body_mass_g))
+
+#extract the trait( variable/ -s), which will be used for te hierarchical clustering
+pingu <- penguins |> select(bill_length_mm, body_mass_g)
+
+##scale data and compute a distance matrix for them
+pingu_scaled.distMatrix <- dist(scale(pingu))
+
+#we can use different linkage types
+complete.hclust <- hclust(pingu_scaled.distMatrix, method = "complete")
+average.hclust <- hclust(pingu_scaled.distMatrix, method = "average")
+
+plot(complete.hclust)
+plot(average.hclust, labels = penguins$species, cex =0.2)
+
+```
+$$
+\\[1cm]
+$$
+
+### 5.5. Visualisation on a heatmap
+
+Heatmaps are graphical representations of data, which  use a color-code to represent their different values. The variation of colors is analogous to the intensity of the data values, and they are used to visually inform the reader about a phenomenon.
+<br> They are commonly used in biomedical research.
+
+```{r}
+expr.data <- read.table("<PATH_TO_RNAseq_Data>", sep = ",", header = T)
+rownames(expr.data) = expr.data[,1]
+#expr.data = as.matrix(expr.data[,-1])
+expr.data = as.matrix(expr.data[,2:ncol(expr.data)])
+heatmap(expr.data, scale = "none")
+heatmap(expr.data, scale = "row")
+library(pheatmap)
+library(RColorBrewer)
+pheatmap(expr.data, fontsize_row = 5)
+
+pheatmap(expr.data, color = colorRampPalette(rev(brewer.pal(n=10, name="RdBu"))) (100), 
+         border_color = "grey60", scale="row", 
+         cellwidth = 20, cellheight = 5, 
+         cluster_rows = TRUE, cluster_cols = TRUE, 
+         show_colnames = TRUE, show_rownames = TRUE,
+         fontsize_row = 5, fontsize_col = 10, fontsize = 10, na_col= "black", legend = TRUE)
+
+#heatmap(expr.data, scale = "column")
+
+```
   
   
   
