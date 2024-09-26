@@ -614,6 +614,63 @@ $$
 \\[3cm]
 $$
 
+### 2.4. Descriptive statistics
+
+The `summary()` function allows to have a quick look at what's in our dataset, but returns many different output. We can instead directly compute descriptive statistics using the following functions:
+
+-   `mean()` for the mean
+
+-   `median()` for the median
+
+-   `quantile()` for any given quantile (generalization of the quartile concept to other fractions than quarters). We indicate the quantile we want with the parameter `probs`, expressed between 0 and 1. Note that the median is equivalent to `quantile(x, probs = 0.5)`.
+
+-   `sd()` for standard deviation, a measure of data variability
+
+By default, all these functions will return `NA` if the data contains NAs. To ignore NAs and return descriptive statistics of the non-missing data, we can use the parameter `na.rm = TRUE`.
+
+```{r}
+mean(penguins$body_mass_g)
+mean(penguins$body_mass_g, na.rm = TRUE)
+median(penguins$flipper_length_mm, na.rm = TRUE)
+quantile(penguins$flipper_length_mm, probs = c(0.10,0.25,0.5,0.75,0.90), na.rm = T)
+sd(penguins$bill_length_mm, na.rm = TRUE)
+
+```
+
+<br>
+
+Before the next exercise, let's add a new column to the dataset that will contain the bill length to depth ratio:
+
+```{r}
+penguins$bill_ratio <- penguins$bill_length_mm / penguins$bill_depth_mm
+```
+
+<br>
+
+#### Exercise 6
+
+1.  What is the mean and standard deviation of the body mass of Adelie penguins?
+
+2.  What is the median flipper length of female penguin?
+
+3.  What are the quartiles and median bill length to depth ratios for Chinstrap penguins?
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+mean(penguins[penguins$species == "Adelie","body_mass_g"], na.rm = TRUE)
+sd(penguins[penguins$species == "Adelie","body_mass_g"], na.rm = TRUE)
+# Mean: 3700.662, sd: 458.5661
+median(penguins[penguins$sex == "female","flipper_length_mm"], na.rm = TRUE)
+# Median: 193
+quantile(penguins[penguins$species == "Chinstrap","bill_ratio"], probs = c(0.25,0.5,0.75), na.rm = TRUE)
+# 1st quartile 2.556, median 2.662, 3rd quartile 2.728
+```
+
+$$
+\\[3cm]
+$$
+
   
   
   
