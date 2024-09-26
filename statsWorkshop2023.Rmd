@@ -321,8 +321,36 @@ $$
 $$
 
   
-  
-  
+### 1.5. Packages
+
+It is possible to expand the functions already available in R or to import new datasets using *packages*. Packages are sets of functions and/or data written by R users that can be shared and used by anyone.
+
+They can be distributed on different sites, with slightly different installation methods. The easiest way to know is to always visit the package's webpage to look at the installation instruction.
+
+For packages distributed through CRAN (the organism responsible for R development), you can install packages using `install.packages("nameOfThePackage")`. During the workshop we will use functions from the packages `tidyr`, `palmerpenguins` and `factoMineR`. To install them, run the following:
+
+```{r, eval=FALSE}
+install.packages("tidyr")
+install.packages("psych")
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("palmerpenguins")
+install.packages("FactoMineR")
+```
+
+<br>This will install these packages on your computer. They need to be loaded with `library()` to be usable in the R session:
+
+```{r}
+library(tidyr)
+library(palmerpenguins)
+library(ggplot2)
+library(FactoMineR)
+```
+
+$$
+\\[3cm]
+$$
+
   
   
   
