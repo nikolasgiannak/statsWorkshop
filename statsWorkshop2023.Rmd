@@ -407,6 +407,75 @@ $$
 \\[1cm]
 $$
 
+### 2.2. Summary of the data
+
+To have a quick look at what is in the dataset, we can use the `summary()` function:
+
+```{r}
+summary(penguins)
+```
+
+<br>Descriptive statistics may be a long gone memory, so here's a reminder:
+
+-   Median is the value that splits the set in 2 halves of the same size. For example, the median body weight of our penguins is 4202g. This means that 50% of penguins have a body mass below or equal to 4202g, and 50% have a body mass above or equal to 4202g.
+
+-   1st and 3rd quartiles are the values that split the set at 25% and 75%, respectively.
+
+<br>
+
+To have a more complete summary of the data, we can also use the function `describe()` from the package `psych`:
+
+```{r, echo=T, results='hide'}
+library(psych)
+```
+
+```{r}
+describe(penguins)
+```
+
+<br>To access one of the columns of a data frame, we can use the symbol `$`, with this syntax:
+
+dataframe\$columnname
+
+```{r}
+penguins$species
+penguins$bill_length_mm
+```
+
+<br>If we want to count data, we can use the function `table()`. We can ask it for counts of one or two variables. The `useNA` parameter is used to indicate R whether to display the number of NAs. It must be one of `"no"`, `"ifany"` or `"always"`, to respectively not show them, show them only if there are NAs, or to always show them, even if there are none. If not specified, it will default to "no". Optionnaly, we can also name the variable we want to count.
+
+```{r}
+table(penguins$sex, useNA = "ifany")
+table(species = penguins$species, island = penguins$island)
+```
+
+<br>
+
+#### Exercise 4
+
+Using the table() function, find the answer to the following:
+
+1.  How many penguins were observed on Dream Island?
+
+2.  How many females were observed in 2008?
+
+3.  How many missing entries (NAs) are there in the island column?
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+table(penguins$island)
+# 124 penguins observed on Dream island
+table(sex = penguins$sex, year = penguins$year)
+# 56 females observed in 2008
+table(penguins$island,useNA = "always")
+# 0 NAs for the island column
+```
+
+$$
+\\[1cm]
+$$
+
   
   
   
