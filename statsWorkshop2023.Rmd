@@ -373,13 +373,40 @@ $$
 
 ![Just in case you are not a professional ornithologist. Artwork by \@allison_horst](images/image-958142444.png)
 
+
 $$
 \\[1cm]
 $$
 
   
-  
-  
+### 2.1. Reading and writing data
+
+The first step to access and analyse a dataset is to load it into the R environment. We provided you with the palmerpenguins dataset as a `.csv` file. This is a text format to represent a table where cells are separated by a comma. To load data from a .csv file into the R environment, we will use the `read.table()` function:
+
+```{r,eval=FALSE}
+penguins <- read.table("PATH/penguins.csv",sep = ",", header = T)
+```
+
+```{r, echo=FALSE}
+penguins <- read.table("penguins.csv",sep = ",", header = T)
+```
+
+Don't forget to adjust the path to the file to allow R to find it. the `sep` argument specifies what was used to separate the table cells. The `header` parameter tells R that the first line contains headers, i.e. column names.
+
+We stored it in a variable called penguins. Its structure is different from other variables: this a table, called a *data frame*. Each individual penguin is on a different line, and each column is a different information on all penguins.
+
+To check everything went well, we can have a look at the first few lines of the data frame:
+
+```{r}
+head(penguins)
+```
+
+This prints the first few lines. You will notice that some data are labeled as NA. This means that this information is missing, something that happens more often than you would think in real life datasets! R encodes this with a special value `NA`.
+
+$$
+\\[1cm]
+$$
+
   
   
   
