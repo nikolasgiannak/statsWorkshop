@@ -543,16 +543,7 @@ table(sex = adelie$sex, island = adelie$island)
 library(dplyr)
 ```
 
-```{r}
-adelieFemales <- filter(penguins, species == "Adelie", sex == "female")
-```
 
-To count the number of rows or columns in a dataframe we do the following:
-
-```{r}
-nrow(adelieFemales)
-ncol(adelieFemales)
-```
 
 
 <br>
@@ -574,6 +565,14 @@ library(dplyr)
 
 ```{r}
 adelieFemales <- filter(penguins, species == "Adelie", sex == "female")
+```
+
+
+To count the number of rows or columns in a dataframe we do the following:
+
+```{r}
+nrow(adelieFemales)
+ncol(adelieFemales)
 ```
 
 <br>
