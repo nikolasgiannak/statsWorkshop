@@ -1,7 +1,7 @@
 ---
   title: "Research Skills Course - Statistics Workshop"
-author: "Nikolas Giannakis & Florent Petitprez"
-date: "January / February 2023"
+author: "Nikolas Giannakis & Bert Malengier-Devlies"
+date: "November 2024 - February 2025"
 output:
   html_document:
   toc: true
@@ -252,6 +252,14 @@ if(a==10){print("a is 10")} else{print("a is not 10")}
 a <- 3
 if(a > 2){a = a-1}
 a
+
+v = c( 12, 46, 89,3, 8)
+if (v[4]== 5) {
+  print("v[4] equals 5")
+} else {
+  print("v[4] is not 5")
+  }
+
 ```
 
 $$
@@ -303,6 +311,20 @@ for(number in 1:15){ # loop on all numbers from 1 to 15
   if(number == 5 | number == 10){toPrint <- "bar"} # replace 5 and 10 by "bar"
   print(toPrint) # print result
 }
+
+
+
+for(number in 1:15){ # loop on all numbers from 1 to 15
+  seeOnScreen <- number # by default, we will need to print the number we are at
+  if(number == 3 | number == 9){seeOnScreen <- "foo"} # replace 3 and 9 by "foo"
+  if(number == 9 | number == 10){seeOnScreen <- "bar"} # replace 5 and 10 by "bar"
+  print(seeOnScreen) # print result
+}
+
+
+
+
+
 ```
 
 *When you are ready to see the answer, click on the "Code" button on the right below this.*
@@ -346,6 +368,20 @@ library(palmerpenguins)
 library(ggplot2)
 library(FactoMineR)
 ```
+
+
+In case you do not know how to use a package, or need further information about it, you can use the help function. 
+?? followed by a package name gives you access to vignettes, code demonstrations and help pages in the lower right panel.
+
+```{r}
+help(package = "ggplot2")
+
+??ggplot2
+```
+
+
+
+
 
 $$
 \\[3cm]
