@@ -332,7 +332,7 @@ for(number in 1:15){ # loop on all numbers from 1 to 15
 for(number in 1:15){ # loop on all numbers from 1 to 15
   seeOnScreen <- number # by default, we will need to print the number we are at
   if(number == 3 | number == 9){seeOnScreen <- "foo"} # replace 3 and 9 by "foo"
-  if(number == 5 | number == 10){seeOnScreen <- "bar"} # replace 5 and 10 by "bar"
+  if(number == 9 | number == 10){seeOnScreen <- "bar"} # replace 5 and 10 by "bar"
   print(seeOnScreen) # print result
 }
 ```
