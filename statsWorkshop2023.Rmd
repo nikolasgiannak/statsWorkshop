@@ -313,18 +313,6 @@ for(number in 1:15){ # loop on all numbers from 1 to 15
 }
 
 
-
-for(number in 1:15){ # loop on all numbers from 1 to 15
-  seeOnScreen <- number # by default, we will need to print the number we are at
-  if(number == 3 | number == 9){seeOnScreen <- "foo"} # replace 3 and 9 by "foo"
-  if(number == 9 | number == 10){seeOnScreen <- "bar"} # replace 5 and 10 by "bar"
-  print(seeOnScreen) # print result
-}
-
-
-
-
-
 ```
 
 *When you are ready to see the answer, click on the "Code" button on the right below this.*
@@ -337,6 +325,23 @@ for(number in 1:15){ # loop on all numbers from 1 to 15
   print(toPrint) # print result
 }
 ```
+
+*What will happen if you overwrite the second argument with a new one. For example, what will happen if you replace 3 and 9 by `"foo"` and 9 and 10 by `"bar"`?
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+for(number in 1:15){ # loop on all numbers from 1 to 15
+  seeOnScreen <- number # by default, we will need to print the number we are at
+  if(number == 3 | number == 9){seeOnScreen <- "foo"} # replace 3 and 9 by "foo"
+  if(number == 5 | number == 10){seeOnScreen <- "bar"} # replace 5 and 10 by "bar"
+  print(seeOnScreen) # print result
+}
+```
+
+
+
+
+
+
 
 $$
 \\[1cm]
@@ -378,9 +383,6 @@ help(package = "ggplot2")
 
 ??ggplot2
 ```
-
-
-
 
 
 $$
