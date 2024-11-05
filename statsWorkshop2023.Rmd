@@ -547,6 +547,14 @@ library(dplyr)
 adelieFemales <- filter(penguins, species == "Adelie", sex == "female")
 ```
 
+To count the number of rows or columns in a dataframe we do the following:
+
+```{r}
+nrow(adelieFemales)
+ncol(adelieFemales)
+```
+
+
 <br>
 
 We can also specify directly which lines and/or columns to keep. To do so, we use the structure `dataframe[lines, columns]`. If either lines or columns are left empty, this means that we want to keep all lines or columns, respectively. We can specify which lines / columns to keep either by giving a vector of logicals, numbers, or names:
