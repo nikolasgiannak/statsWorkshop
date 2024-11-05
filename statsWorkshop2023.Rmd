@@ -376,10 +376,11 @@ library(FactoMineR)
 
 
 In case you do not know how to use a package, or need further information about it, you can use the help function. 
-?? followed by a package name gives you access to vignettes, code demonstrations and help pages in the lower right panel.
+? OR ?? followed by a package name gives you access to vignettes, code demonstrations and help pages in the lower right panel.
 
 ```{r}
 help(package = "ggplot2")
+?ggplot2
 
 ??ggplot2
 ```
