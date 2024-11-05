@@ -537,11 +537,7 @@ malesTorgersen <- subset(penguins, island == "Torgersen" & sex == "Male")
 table(sex = adelie$sex, island = adelie$island)
 ```
 
-<br> Another way to subset the data is to use the `filter()` function from the package `dplyr`. It works similarly to `subset()`.
 
-```{r, echo=T, results='hide'}
-library(dplyr)
-```
 
 
 
