@@ -1,0 +1,1185 @@
+---
+title: "Research Skills Course - Statistics Workshop"
+author: "Nikolas Giannakis & Bert Malengier-Devlies"
+date: "November 2024 - February 2025"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+lang: "en"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+The objective of this workshop is to introduce statistics and data analysis using the R programming language. We will start by exploring what R is and to use it as a calculator, then we will analyse the *penguins* dataset.
+
+### The Rstudio interface
+
+Throughout this workshop, we will Rstudio. Rstudio is an *integrated development environment*, a software that includes everything we need to use R comfortably. Here's a overview of the interface.
+
+![](images/image-214251958.png)
+
+<br>
+
+The Rstudio interface you have in front of you is divided in 4 parts:\
+
+1.  Upper left: the script area. Here you can write several lines of code. To execute a bit of code written here, either select it and click on Run, or click on the line and press Ctrl + ↵
+
+2.  Lower left: the is the R console. Here can enter single commands. All executed commands (including those ran from the scipt area) will be sent here, and R responses will be displayed here.
+
+3.  Upper right: the environment panel. In this panel. This shows everything that has already been stored in the environment: data, variables, ...
+
+4.  Lower right: file browser, plots, help on functions, ...
+
+<br>
+
+### Files and working directory
+
+All the necessary files are included in the folder we've provided to you, called `StatsWorkshop`.
+We will work inside this folder and define it as our *working directory*, 
+meaning that everything that we will generate and read will be from this place.
+Using the Files panel in Rstudio, navigate to inside this folder. 
+Then click on "More" on the top of this panel, then "Set as working directory".
+You will notice that a command has appeared in the console panel:
+clicking on set as working directory has instructed Rstudio to run a `setwd` command. 
+This is in fact another way to set the working directory, by executing a command `setwd("PATH/TO/THE/DIRECTORY")`.
+If we want a reminder of where R is currently working, we can request to know the working directory with the command `getwd()`.
+
+<br>
+  
+## Module 1: R as a calculator and programming basics
+
+![Trust me, it can be a bit more impressive than that](images/image-125835384.png)
+
+<br>In this module, we will see how we can use R as a (quite powerful) calculator and learn some basics of coding in R that will be necessary for the rest of the workshop.
+
+$$
+\\[1cm]
+$$
+
+### 1.1. Basic Operations
+
+The console of R can be used as a basic calculator. For example, we can type the following commands, and R will compute and display the result.
+
+```{r calculator1}
+3+2
+2+3*5
+(2+3)*5
+42*123
+(15+3)/(143.7-17)
+2^11
+```
+
+<br>R also knows standard function like square root (`sqrt`), exponential (`exp`) or base 10 logarithm (`log10`).
+
+```{r calculator5}
+sqrt(125)
+exp(10)
+log10(1000)
+```
+
+#### Exercise 1
+
+What are the values of the following?
+
+$$
+log_{10}\left(9+{{2+3}\over{10-5}}\right)
+$$
+
+$$
+\sqrt{5^3 + 3 \times 7 - 2}
+$$
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r correction1, class.source = 'fold-hide', collapse=TRUE}
+log10(9+(2+3)/(10-5))
+sqrt(5^3+3*7-2)
+```
+
+$$
+\\[1cm]
+$$
+
+### 1.2. Variables
+
+R can store values in *variables*. They are assigned using the symbol `<-`.
+
+```{r variables}
+a <- 3
+b <- 5
+a*b
+```
+
+<br>Variables can be overwritten:
+
+```{r overwriteVars}
+a <- 42
+b <- a-40
+a
+b
+a <- 3
+a
+b
+```
+
+Note that in the above example, overwriting `a` did not change the value of `b`: R does not go back to rerun older lines of code!
+
+<br>You can name your variables with whatever name you want, with a few exceptions that are protected names. Do not hesitate to give long, clear names to your variables. R is a case-sensitive language, which means that `thisvariable`, `ThisVariable` and `THISVARIABLE` will all be considered to be different names.
+
+Importantly, variables can have different types. Such types include:
+
+-   Integer, *e.g.* `3`
+
+-   Numeric, *e.g.* `-3.14`
+
+-   Character, *e.g.* `"This is a character"`. They are defined between quotes, either `"double"` or `'simple'`.
+
+-   Logical, being either `TRUE` or `FALSE`. We will cover these in more details in the next section.
+
+There are other types, but these will be the most frequent ones. Note that not all operations are possible on all types:
+
+```{r additionCharacters, error = TRUE}
+character1 <- "Trying to"
+character2 <- "add characters."
+character1 + character2
+```
+
+<br>*Note: if you want to concatenate characters, the function to do so is called* `paste`*:*
+
+```{r paste}
+character1 <- "Pasting characters"
+character2 <- "works much better."
+paste(character1, character2)
+```
+
+<br>We will often need not only one value, but a set of values. To do so, we can create *vectors* using `c()`. The `i`-th value in the vector `v` can be accessed using `v[i]`.
+
+```{r}
+v <- c(1,3,5,7,9)
+v
+
+v[3]
+```
+
+<br>Vectors can contain any type of variable. However, they can only contain variables that are from the same type. If you want to group variables of different types, you need to use a structure called *lists*, but we do not have the time to cover them in this workshop.
+
+Special case: if you want all integer values between two numbers, there is a shortcut: `start:end`.
+
+```{r}
+numberSequence <- 3:103
+numberSequence
+```
+
+$$
+\\[1cm]
+$$
+
+### 1.3. Logical and 'if' statement
+
+We can create some variables that are called *logical* or *booleans*. This means that they can take only two values: `TRUE` or `FALSE`, sometimes coded as 1 and 0. These names are protected in R so you cannot override them by creating a variable with these names. There are specific operations that we can make on logical variables:
+
+-   **x AND y** returns TRUE if both x and y are TRUE, returns FALSE otherwise
+
+-   **x OR y** returns TRUE if at least one of x or y is TRUE, returns FALSE if both x and y are FALSE
+
+-   **NOT x** returns the opposite of x: FALSE if is TRUE, TRUE if x is FALSE
+
+In R, AND is coded by `&`, OR is coded by `|` (above the `\` symbol on the keyboard) and not is coded by `!`.
+
+```{r logicalExample}
+t <- TRUE
+f <- FALSE
+t & f
+t | f
+!t
+!f
+```
+
+<br>
+
+#### Exercise 2
+
+with t being defined as `TRUE` and f as `FALSE` (as above), what do the following evaluate to?
+
+t AND NOT f
+
+NOT (t OR f)
+
+((NOT t) OR f) AND t
+
+Before you evaluate them in R, try to see if you can figure them out by yourself.
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r correction2, class.source = 'fold-hide', collapse=TRUE}
+t <- TRUE
+f <- FALSE
+t & !f
+!(t | f)
+((!t) | f) & t
+```
+
+We can evaluate whether two variable have the same value with `==` or if they are different with `!=`. These operations return logical values:
+
+```{r}
+a <- 3
+a == 5
+b <- 7
+a != b
+```
+
+<br>The logical variables can be used to run bits of code only when a certain condition is met. To do so, we can use the `if() else` structure:
+
+```{r, eval=FALSE}
+if(CONDITION){*CODE TO RUN IF THE CONDITION IS MET*} else{*CODE TO RUN IF THE CONDITION IS NOT MET*}
+```
+
+Note that the `else{}` statement is optional, and we can remove it if we don not need anything to be done if the condition is not met. Here is an example:
+
+```{r}
+a <- 10
+if(a==10){print("a is 10")} else{print("a is not 10")}
+
+a <- 5
+if(a==10){print("a is 10")} else{print("a is not 10")}
+
+a <- 3
+if(a > 2){a = a-1}
+a
+```
+
+$$
+\\[1cm]
+$$
+
+### 1.4. Loops
+
+When we need a part of the code to be run several times, there is no need to copy and paste the same chunk of code several times (imagine if you need to run it 100,000 times!). There are structures called *loops*. The most frequent one is the for loop, which follows this structure:
+
+```{r, eval=FALSE}
+for(variable in SET OF VALUES){
+  CODE TO BE RUN MULTIPLE TIMES,
+  ONE FOR EACH VALUE IN SET OF VALUES
+  THIS CODE CAN USE variables
+}
+```
+
+<br>Here are a few examples:
+
+```{r}
+for(a in c(1,3,5,7,9)){
+  print(a)
+}
+
+count <- 0
+for(loop in 1:10){
+  count <- count +1
+}
+count
+
+sentence <- ""
+for(word in c("One","word","at","a","time.")){
+  sentence <- paste(sentence,word)
+}
+sentence
+```
+
+<br>
+
+#### Exercise 3
+
+Write a loop that prints every number form 1 to 15 but that replaces 3 and 9 by `"foo"` and 5 and 10 by `"bar"`, giving the following output:
+
+```{r, echo=FALSE}
+for(number in 1:15){ # loop on all numbers from 1 to 15
+  toPrint <- number # by default, we will need to print the number we are at
+  if(number == 3 | number == 9){toPrint <- "foo"} # replace 3 and 9 by "foo"
+  if(number == 5 | number == 10){toPrint <- "bar"} # replace 5 and 10 by "bar"
+  print(toPrint) # print result
+}
+```
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+for(number in 1:15){ # loop on all numbers from 1 to 15
+  toPrint <- number # by default, we will need to print the number we are at
+  if(number == 3 | number == 9){toPrint <- "foo"} # replace 3 and 9 by "foo"
+  if(number == 5 | number == 10){toPrint <- "bar"} # replace 5 and 10 by "bar"
+  print(toPrint) # print result
+}
+```
+
+$$
+\\[1cm]
+$$
+
+  
+### 1.5. Packages
+
+It is possible to expand the functions already available in R or to import new datasets using *packages*. Packages are sets of functions and/or data written by R users that can be shared and used by anyone.
+
+They can be distributed on different sites, with slightly different installation methods. The easiest way to know is to always visit the package's webpage to look at the installation instruction.
+
+For packages distributed through CRAN (the organism responsible for R development), you can install packages using `install.packages("nameOfThePackage")`. During the workshop we will use functions from the packages `tidyr`, `palmerpenguins` and `factoMineR`. To install them, run the following:
+
+```{r, eval=FALSE}
+install.packages("tidyr")
+install.packages("psych")
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("palmerpenguins")
+install.packages("FactoMineR")
+install.packages("hrbrthemes")
+```
+
+<br>This will install these packages on your computer. They need to be loaded with `library()` to be usable in the R session:
+
+```{r}
+library(tidyr)
+library(palmerpenguins)
+library(ggplot2)
+library(FactoMineR)
+```
+
+$$
+\\[3cm]
+$$
+
+## Module 2: First look at the penguins
+
+![Three penguins species! Artwork by \@allison_horst](images/image-1290573199.png)
+
+<br> During the rest of the workshop, we will analyze an example dataset, that lists measurements of penguins observed in the Palmer Archipelago (Antarctica) by Dr Kristen Gorman (University of Alaska). For each animal included in the dataset, we have access to:
+
+-   Its species
+
+-   The island it was observed on
+
+-   The length and depth of it bill (see illustration below)
+
+-   Its flipper length
+
+-   Its body mass
+
+-   Its sex
+
+-   The year it was observed
+
+![Just in case you are not a professional ornithologist. Artwork by \@allison_horst](images/image-958142444.png)
+
+
+$$
+\\[1cm]
+$$
+
+  
+### 2.1. Reading and writing data
+
+The first step to access and analyse a dataset is to load it into the R environment. We provided you with the palmerpenguins dataset as a `.csv` file. This is a text format to represent a table where cells are separated by a comma. To load data from a .csv file into the R environment, we will use the `read.table()` function:
+
+```{r,eval=FALSE}
+penguins <- read.table("PATH/penguins.csv",sep = ",", header = T)
+```
+getwd
+
+penguins =
+
+```{r, echo=FALSE}
+penguins <- read.table("penguins.csv",sep = ",", header = T)
+
+
+```
+
+You can also choose the file interactively and then  read the file on the saved file name. 
+This is how you are going to do this: 
+1. f <- file.choose()
+2. penguins <- read.csv(f)
+
+Don't forget to adjust the path to the file to allow R to find it. the `sep` argument specifies what was used to separate the table cells. The `header` parameter tells R that the first line contains headers, i.e. column names.
+
+We stored it in a variable called penguins. Its structure is different from other variables: this a table, called a *data frame*. Each individual penguin is on a different line, and each column is a different information on all penguins.
+
+To check everything went well, we can have a look at the first few lines of the data frame:
+
+```{r}
+head(penguins)
+```
+
+This prints the first few lines. You will notice that some data are labeled as NA. This means that this information is missing, something that happens more often than you would think in real life datasets! R encodes this with a special value `NA`.
+
+$$
+\\[1cm]
+$$
+
+### 2.2. Summary of the data
+
+To have a quick look at what is in the dataset, we can use the `summary()` function:
+
+```{r}
+summary(penguins)
+```
+
+<br>Descriptive statistics may be a long gone memory, so here's a reminder:
+
+-   Median is the value that splits the set in 2 halves of the same size. For example, the median body weight of our penguins is 4202g. This means that 50% of penguins have a body mass below or equal to 4202g, and 50% have a body mass above or equal to 4202g.
+
+-   1st and 3rd quartiles are the values that split the set at 25% and 75%, respectively.
+
+<br>
+
+To have a more complete summary of the data, we can also use the function `describe()` from the package `psych`:
+
+```{r, echo=T, results='hide'}
+library(psych)
+```
+
+```{r}
+describe(penguins)
+```
+
+<br>To access one of the columns of a data frame, we can use the symbol `$`, with this syntax:
+
+dataframe\$columnname
+
+```{r}
+penguins$species
+penguins$bill_length_mm
+```
+
+<br>If we want to count data, we can use the function `table()`. We can ask it for counts of one or two variables. The `useNA` parameter is used to indicate R whether to display the number of NAs. It must be one of `"no"`, `"ifany"` or `"always"`, to respectively not show them, show them only if there are NAs, or to always show them, even if there are none. If not specified, it will default to "no". Optionnaly, we can also name the variable we want to count.
+
+```{r}
+table(penguins$sex, useNA = "ifany")
+table(species = penguins$species, island = penguins$island)
+```
+
+<br>
+
+#### Exercise 4
+
+Using the table() function, find the answer to the following:
+
+1.  How many penguins were observed on Dream Island?
+
+2.  How many females were observed in 2008?
+
+3.  How many missing entries (NAs) are there in the island column?
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+table(penguins$island)
+# 124 penguins observed on Dream island
+table(sex = penguins$sex, year = penguins$year)
+# 56 females observed in 2008
+table(penguins$island,useNA = "always")
+# 0 NAs for the island column
+```
+
+$$
+\\[1cm]
+$$
+
+### 2.3. Subsetting the dataset
+
+Perhaps we don't want to look at all available penguins but maybe we are only interested in Adelie penguins. For this and many different analyses, we will need to only look at a subet of the dataset. There are several ways to do so. The first one is using the subset() function:
+
+```{r}
+adelie <- subset(penguins, species=="Adelie")
+table(species = adelie$species, island = adelie$island)
+```
+
+If we want to specify several possible value, can use the constructor `%in%`:
+
+```{r}
+biscoeDream <- subset(penguins, island %in% c("Biscoe","Dream"))
+table(species = adelie$species, island = adelie$island)
+```
+
+We can also put several conditions:
+
+```{r}
+malesTorgersen <- subset(penguins, island == "Torgersen" & sex == "Male")
+table(sex = adelie$sex, island = adelie$island)
+```
+
+<br> Another way to subset the data is to use the `filter()` function from the package `dplyr`. It works similarly to `subset()`.
+
+```{r, echo=T, results='hide'}
+library(dplyr)
+```
+
+```{r}
+adelieFemales <- filter(penguins, species == "Adelie", sex == "female")
+```
+
+<br>
+
+We can also specify directly which lines and/or columns to keep. To do so, we use the structure `dataframe[lines, columns]`. If either lines or columns are left empty, this means that we want to keep all lines or columns, respectively. We can specify which lines / columns to keep either by giving a vector of logicals, numbers, or names:
+
+```{r}
+subset <- penguins[penguins$island == "Biscoe", c("species","island","body_mass_g")] #keep only lines that have "Biscoe" as island, and keep only columns "species", "island" and "body_mass_g"
+subset <- penguins[25:40,] # keep only lines 25 to 40, and all columns
+```
+
+<br>
+
+Another way to subset the data is to use the `filter()` function from the package `dplyr`. It works similarly to `subset()`.
+
+```{r, echo=T, results='hide'}
+library(dplyr)
+```
+
+```{r}
+adelieFemales <- filter(penguins, species == "Adelie", sex == "female")
+```
+
+<br>
+
+#### Exercise 5
+
+Using `table()` or `summary()` on a subset of the penguins data frame, find out the answer to the following questions:
+
+1.  What is the mean body weight of female Gentoo penguins?
+
+2.  What is the smallest observed flipper length for Chinstrap penguins in 2007?
+
+3.  How many Adelie penguins weighing less than 4,000 g were observed on Dream Island?
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+summary(subset(penguins,sex=="female" & species == "Gentoo"))
+# Mean body mass: 4680g 
+summary(subset(penguins,year==2007 & species == "Chinstrap"))
+# Minimum flipper length: 178.8mm
+table(penguins[penguins$species=="Adelie" & penguins$body_mass_g < 4000, "island"])
+# 42 Adelie penguins weighing less than 4,000g on Dream island
+```
+
+$$
+\\[1cm]
+$$
+
+### 2.4. Descriptive statistics
+
+The `summary()` function allows to have a quick look at what's in our dataset, but returns many different output. We can instead directly compute descriptive statistics using the following functions:
+
+-   `mean()` for the mean
+
+-   `median()` for the median
+
+-   `quantile()` for any given quantile (generalization of the quartile concept to other fractions than quarters). We indicate the quantile we want with the parameter `probs`, expressed between 0 and 1. Note that the median is equivalent to `quantile(x, probs = 0.5)`.
+
+-   `sd()` for standard deviation, a measure of data variability
+
+By default, all these functions will return `NA` if the data contains NAs. To ignore NAs and return descriptive statistics of the non-missing data, we can use the parameter `na.rm = TRUE`.
+
+```{r}
+mean(penguins$body_mass_g)
+mean(penguins$body_mass_g, na.rm = TRUE)
+median(penguins$flipper_length_mm, na.rm = TRUE)
+quantile(penguins$flipper_length_mm, probs = c(0.10,0.25,0.5,0.75,0.90), na.rm = T)
+sd(penguins$bill_length_mm, na.rm = TRUE)
+
+```
+
+<br>
+
+Before the next exercise, let's add a new column to the dataset that will contain the bill length to depth ratio:
+
+```{r}
+penguins$bill_ratio <- penguins$bill_length_mm / penguins$bill_depth_mm
+```
+
+<br>
+
+#### Exercise 6
+
+1.  What is the mean and standard deviation of the body mass of Adelie penguins?
+
+2.  What is the median flipper length of female penguin?
+
+3.  What are the quartiles and median bill length to depth ratios for Chinstrap penguins?
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+mean(penguins[penguins$species == "Adelie","body_mass_g"], na.rm = TRUE)
+sd(penguins[penguins$species == "Adelie","body_mass_g"], na.rm = TRUE)
+# Mean: 3700.662, sd: 458.5661
+median(penguins[penguins$sex == "female","flipper_length_mm"], na.rm = TRUE)
+# Median: 193
+quantile(penguins[penguins$species == "Chinstrap","bill_ratio"], probs = c(0.25,0.5,0.75), na.rm = TRUE)
+# 1st quartile 2.556, median 2.662, 3rd quartile 2.728
+```
+
+$$
+\\[3cm]
+$$
+
+### 2.4. Descriptive statistics
+
+The `summary()` function allows to have a quick look at what's in our dataset, but returns many different output. We can instead directly compute descriptive statistics using the following functions:
+
+-   `mean()` for the mean
+
+-   `median()` for the median
+
+-   `quantile()` for any given quantile (generalization of the quartile concept to other fractions than quarters). We indicate the quantile we want with the parameter `probs`, expressed between 0 and 1. Note that the median is equivalent to `quantile(x, probs = 0.5)`.
+
+-   `sd()` for standard deviation, a measure of data variability
+
+By default, all these functions will return `NA` if the data contains NAs. To ignore NAs and return descriptive statistics of the non-missing data, we can use the parameter `na.rm = TRUE`.
+
+```{r}
+mean(penguins$body_mass_g)
+mean(penguins$body_mass_g, na.rm = TRUE)
+median(penguins$flipper_length_mm, na.rm = TRUE)
+quantile(penguins$flipper_length_mm, probs = c(0.10,0.25,0.5,0.75,0.90), na.rm = T)
+sd(penguins$bill_length_mm, na.rm = TRUE)
+
+```
+
+<br>
+
+Before the next exercise, let's add a new column to the dataset that will contain the bill length to depth ratio:
+
+```{r}
+penguins$bill_ratio <- penguins$bill_length_mm / penguins$bill_depth_mm
+```
+
+<br>
+
+#### Exercise 6
+
+1.  What is the mean and standard deviation of the body mass of Adelie penguins?
+
+2.  What is the median flipper length of female penguin?
+
+3.  What are the quartiles and median bill length to depth ratios for Chinstrap penguins?
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE}
+mean(penguins[penguins$species == "Adelie","body_mass_g"], na.rm = TRUE)
+sd(penguins[penguins$species == "Adelie","body_mass_g"], na.rm = TRUE)
+# Mean: 3700.662, sd: 458.5661
+median(penguins[penguins$sex == "female","flipper_length_mm"], na.rm = TRUE)
+# Median: 193
+quantile(penguins[penguins$species == "Chinstrap","bill_ratio"], probs = c(0.25,0.5,0.75), na.rm = TRUE)
+# 1st quartile 2.556, median 2.662, 3rd quartile 2.728
+```
+
+$$
+\\[3cm]
+$$
+
+## Module 3: Data visualisation
+
+![Let's have a look at some pretty plots.](images/image-215533895.png)
+
+To have a better sense of any dataset, plotting some results can be very useful.
+In this module, we'll learn how to draw simple graphics using the base R functions.
+Those are rather rudimentary but are easier to use and still allow some flexibility.
+If you want to create more refined graphics using R, we encourage you to have a look at what [ggplot2](https://r-graph-gallery.com/ggplot2-package.html) can offer!
+We'll give a ggplot2 example for each plot type if you want to learn more.
+
+### 3.1. Histograms
+
+One of the first graphs we can have a look at are histograms.
+These allow to have a rapid glance at the distribution of our data.
+We can draw them using the `hist` function.
+We can control the number of bars with `breaks`, which either takes the numeric values at which to break, or a target number of bars.
+
+```{r}
+hist(penguins$bill_length_mm)
+hist(penguins[penguins$species == "Gentoo", "body_mass_g"], breaks = 10)
+```
+
+We're probably thinking that these plots are fairly ugly.
+And you'd be right.
+Let's improve them.
+First, we can modify x axis label using the `xlab` parameter and a title using `main`.
+
+```{r}
+hist(penguins[penguins$species == "Gentoo", "body_mass_g"], breaks = 10, xlab = "Body mass (g)", main = "Body mass distribution of Gentoo penguins")
+```
+
+<br>Then we can change the grey color to anything we'd like.
+This is controlled with the `col` parameter.
+We can either set a frequent color name such as `"red"` or `"blue"`, or input the hexadecimal code of the color after #:
+
+```{r}
+hist(penguins[penguins$species == "Gentoo", "body_mass_g"], breaks = 10, xlab = "Body mass (g)", main = "Body mass distribution of Gentoo penguins", col = "#057803")
+```
+
+<br>
+
+#### Exercise 7
+
+Draw a histogram of the flipper length of female penguins, with a proper x axis label, a title and color it anything else than grey.
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE, include = FALSE}
+hist(penguins[penguins$sex == "female", "flipper_length_mm"], xlab = "Flipper length (mm)", main = "Flipper length distribution in female penguins", col = "lightblue")
+```
+
+If you want an example of what ggplot2 can offer instead of the base R functions:
+
+```{r}
+library(ggplot2)
+
+ggplot(penguins, mapping = aes(x = body_mass_g, fill = species)) + # draw a ggplot2 figure on the penguins data frame, where the x axis is the body mass, and the colours depend on the species
+  geom_histogram(alpha = 0.7, position = "identity", bins = 20) + # draw a histogram, with 30% transparence and overlap them
+  labs(title = "Penguins body mass distribution", subtitle = "By species", x = "Body mass (g)", y = "Count") + # Set title and labels
+  scale_fill_manual(values = c("#ff1111","#bf12cb","#067275")) + # specify the colour scheme
+  theme_bw() # set the theme
+```
+
+$$
+\\[1cm]
+$$
+
+### 3.2. Scatterplots
+
+Another simple graph type are scatterplots.
+These are points drawn from their (x,y) coordinates.
+They can help to see if two numerical variables are associated.
+Here are some examples:
+
+```{r}
+plot(x = penguins$bill_length_mm, y = penguins$bill_depth_mm)
+plot(x = penguins$flipper_length_mm, y = penguins$body_mass_g)
+```
+
+<br>
+
+These plots are again not very eye-pleasing.
+Let's tweak them.
+Similarly as above, we can add labels to each axis.
+Let's put dots instead of circles with the parameter pch (you can find the whole list of possible values [here](http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r)).Let's also color the points depending on each penguin's species.
+To do so, we will use the parameter `color`.
+We need to send him a vector of colors, with one color for each point.
+The easiest way to do so is the following: c`ol = c("Adelie" = "#ff7900", "Chinstrap" = "#bf5ccb", "Gentoo" = "#067275")[penguins$species]`.
+Finally, using the function `legend()`, we can add a legend to our plot.
+
+```{r}
+plot(x = penguins$flipper_length_mm, y = penguins$body_mass_g, pch = 16, xlab = "Flipper length (mm)", ylab = "Body mass (g)", col = c("Adelie" = "#ff7900", "Chinstrap" = "#bf5ccb", "Gentoo" = "#067275")[penguins$species])
+legend("topleft",legend = c("Adelie","Chinstrap","Gentoo"),col = c("#ff7900","#bf5ccb","#067275"), pch = 16)
+```
+
+<br>
+
+#### Exercise 8
+
+Draw a scatterplot representing the body mass of penguins on the x axis and their bill length on the y axis.
+Color it depending on the islands, and put different symbols for male and female penguins.
+Add proper labels, a legend for the islands on the bottom right of the plot and a legend for the sex on the top left.
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE, include = FALSE}
+plot(x = penguins$body_mass_g, y = penguins$bill_length_mm, pch = c("male" = 15, female = 17)[penguins$sex], xlab = "Body mass (g)", ylab = "Bill length (mm)", col = c("Biscoe" = "darkgreen", "Dream" = "darkblue", "Torgersen" = "darkred")[penguins$island])
+
+legend("bottomright",legend = c("Biscoe","Dream","Torgersen"),col = c("darkgreen","darkblue","darkred"), pch = 16)
+
+legend("topleft",legend = c("Male", "Female"), pch = c(15,17))
+```
+
+$$
+\\[1cm]
+$$
+
+### 3.3. Boxplots
+
+To represent the different possible values taken by a variable, we can draw boxplots.
+Here is a boxplot example for the flipper length of our penguins:
+
+```{r}
+boxplot(penguins$flipper_length_mm)
+```
+
+The large horizontal bar represents the median.
+The box itself extends from the first to the third quartile.
+The whiskers try to extend to the min/max but will not extend for more than 1.5 times the interquartile range (the distance between 1st and 3rd quartiles).
+If some data points are outside of this range (outliers), they are drawn individually.
+
+<br>We can specify that we want different boxes for different modalities associated with a given categorical variable using the symbol `~`:
+
+```{r}
+boxplot(penguins$body_mass_g ~ penguins$species)
+boxplot(penguins$flipper_length_mm ~ penguins$island)
+```
+
+<br>Once again, we can make the graphs nicer using parameters such as `col`, `xlab`, `ylab` or `main`.
+We can also use `ylim` to manually specify the limits of the y axis:
+
+```{r}
+boxplot(penguins$body_mass_g ~ penguins$island, col = c("darkgreen","darkblue","darkred"), xlab = "Island", ylab = "Body mass (g)", main = "Body mass by island", ylim = c(0,7000))
+```
+
+
+
+We can also use the geom_jitter() argument from the ggplot2 package, add individual observation on top of boxes.
+This function shifts all dots by a random value ranging from 0 to size, avoiding overlaps.
+
+```{r}
+library(hrbrthemes)
+ggplot(penguins, aes(x=island, y=body_mass_g, fill=island)) +
+    geom_boxplot() + 
+  scale_fill_manual(values = c("#ff7900","#bf5ccb","lightblue")) +
+    geom_jitter(color= "black", size=1, alpha=0.8) +
+    theme_bw()  + 
+  labs(title = "Body mass",  subtitle = "by island", , y = "Body mass (g)", tag = "Figure 1a") +
+  theme(plot.title = element_text(color="darkblue", size=25, face="bold.italic"),
+  axis.title.y = element_text(color="darkred", size=14, face="bold"))
+   
+
+
+
+
+```
+<br>
+
+#### Exercise 9
+
+Draw a boxplot showing the bill length by sex.
+Add some labels and colors, and start the y axis at 0.
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE, include = FALSE}
+boxplot(penguins$bill_length_mm ~ penguins$sex, col = c("orange","lightgreen"), xlab = "Sex", ylab = "Bill length (mm)", main = "Bill length by sex", ylim = c(0,max(penguins$bill_length_mm,na.rm = TRUE)))
+```
+
+
+
+
+$$
+\\[1cm]
+$$
+
+
+## Module 4: Distributions and statistical tests
+
+### 4.1. Data preparation to compare group means
+
+We will focus on our penguins data creating subsets of them to see their distribution.
+We will step-by-step check the "rules" that need to be followed in order to perform different types of tests to check if they are "equal" or not.
+When we test for "equality" we usually check differences in the mean values of different groups in our dataset.
+Let's start by trying to collect the data that will be used in our analysis, by focusing on the penguins from the "Adelie" and "Gentoo" species.
+We start by subsetting the dataset using `filter`.
+You will note in this example a different structure: `|>` is called a *pipe*.
+It tells R to send the object specified before `|>` as the main argument of the following function.
+It can be used to make the code clearer to read.
+
+```{r}
+library(dplyr)
+data_to_test <- penguins 
+data_to_test <- data_to_test |> filter(species %in% c("Adelie","Gentoo"),   !is.na(body_mass_g))
+```
+
+Let's have a quick look of our data using the `summary()` and `describe()` functions.
+What is the output of these functions?
+What does it mean?
+
+```{r}
+library(psych)
+summary(data_to_test)
+describe(data_to_test)
+
+```
+
+$$
+\\[1cm]
+$$
+
+### 4.2. The normal distribution
+
+![](images/image-1800502499.png)
+
+$$
+\\[1cm]
+$$
+
+![](images/image-1781426681.png)
+
+<br>How can we understand that our data follow the normal distribution as seen above?
+<br>Firstly, we can plot a histogram of our data to check how they look.
+In R, we do the following to draw the histograms of the body mass by species using `ggplot2`:
+
+```{r}
+ggplot(aes(x=body_mass_g), data = data_to_test) +
+  geom_histogram(binwidth = 200) +
+  facet_wrap(~species) +
+  theme_bw()
+```
+
+<br>It seems that our data, after choosing a right bin size, follow the normal distribution, without major outliers.
+
+Secondly, we need to check the Q-Q (quantile-quantile) plots.
+In normally distributed data, these plots should fall along the 1:1 line.
+The most simple way to do it is the following
+
+```{r}
+qqnorm(data_to_test$body_mass_g)
+qqline(data_to_test$body_mass_g)
+```
+
+<br>To have a more clear picture we can vizualize two plots for each species.
+
+```{r}
+data_to_test |>
+  ggplot(aes(sample = body_mass_g )) + 
+  geom_qq() +
+  geom_qq_line(colour ='darkred') +
+  facet_wrap(~species) +
+  theme_bw()
+```
+
+<br>Last but not least, we need to check that the variances of the two groups are equal.
+If, also the variances are equal, then we can assume that the data follow the normal distribution, and we can perform a parametric test to check for their differences.
+To do that we will perform the Levene's test for equality of variances.
+We will use the `levene_test()` function from the `rstatix` package.
+
+```{r}
+library(rstatix)
+# check for equality of variance with Levene's test
+data_to_test |> levene_test(body_mass_g ~ species) 
+```
+
+What is the p-value from the test?
+Is it less than 0.05?
+If the p-value is \> 0.05, it means that the variances are not significantly different.
+
+$$
+\\[1cm]
+$$
+
+### 4.3. Parametric tests and when we use them
+
+When we want to compare the difference between two means, we conduct a t-test.
+In a t-test, we test the initial hypothesis (H0), that the means are equal.
+Practically, after conducting the t-test, we check the p-value, and if it is \< 0.05, we reject the null hypothesis, accepting an alternative hypothesis, that the means are significantly different.
+
+There are several types of t-test, which include:
+
+-   One-sample t-test.
+    Here, we compare the mean of a sample to a known value.
+    In our example, we could compare the body mass of our lovely penguins to the literature's standard.
+
+-   Unpaired two-sample t-test Here, we compare the mean of two independent groups.
+    In our example, we could compare the mean value of body mass of the male penguins to the female ones.
+    Alternatively, the body mass of the body mass of the Adlie penguins can be compared to the Gentoo penguins.
+
+-   Paired t-test This test is used to compare the mean values of two RELATED groups of samples.
+    For example, it could be used when we compare the average weight of a sample (weight of polar bears) before and after winter.
+
+To compare the difference of means in more than 2 samples (3 and more), the parametric test used is the One way Analysis of Variance, but it will not be covered in this workshop.
+
+In our example, we can conclude that the data follow the normal distribution, therefore we will perform a parametric test to compare the mean value of the body mass in our two groups, Adelie and Gentoo penguins.
+<br>In base R we do the following:
+
+```{r}
+ t.test(data_to_test$body_mass_g ~ data_to_test$species)
+```
+
+<br>Using the dplyr package:
+
+```{r}
+ data_to_test |>
+   t_test(body_mass_g ~ species)
+```
+
+<br>What do we conclude?
+Is the body mass of Adelie and Gentoo penguins significantly different?
+
+Let's create a nice visualization that includes the graphs we created when we checked for normality, together with boxplots that show the body mass of our two groups.
+
+```{r}
+
+p1 <- ggplot(aes(x=body_mass_g), data = data_to_test) +
+  geom_histogram(binwidth = 200) +
+  facet_wrap(~species) +
+  theme_bw()
+
+p2 <- data_to_test |>
+  ggplot(aes(sample = body_mass_g )) + 
+  geom_qq() +
+  geom_qq_line(colour ='darkred') +
+  facet_wrap(~species) +
+  theme_bw()
+
+p3 <- data_to_test |>
+  ggplot(aes(x = species,
+             y = body_mass_g)) +
+  geom_boxplot(aes(fill = species)) +
+  scale_fill_manual(values = c("darkorange","cyan4")) +
+  geom_jitter( alpha =0.5) +
+  theme_bw()
+
+
+library(patchwork)
+p1/ p2 | p3
+
+```
+
+<br>The previous was an example of an unpaired two-sample t-test.
+<br> But let's also perform a one sample t-test where we will compare the body mass of penguins, regardless the island the come from, to the literature's standard body mass of penguins in Antarctica, which is 3700kg.
+
+```{r}
+t.test(penguins$body_mass_g, mu = 3700, alternative = "two.sided")
+
+```
+
+Does the body mass of our sample's data significantly differ from the literature's standard value?
+If, instead of 3700, we compare the body mass of the penguins' dataset to 4200, what would be your conclusion?
+Would it be the same?
+$$
+\\[1cm]
+$$
+
+### 4.4. Non-parametric tests and when we use them
+
+When our data are not "normal" (normally distributed), instead of a parametric test we use a non-parametric alternative.
+More specifically, a non-parametric test does not assume anything about the underlying distribution of our data.
+
+In our example, in case we haven't performed a 'normality' check, we can perform a Mann-Whitney U test, which is the non-parametric alternative to the unpaired t-test.
+
+```{r}
+wilcox.test(data_to_test$body_mass_g ~ data_to_test$species, paired = FALSE)
+
+```
+
+$$
+\\[1cm]
+$$ <br>
+
+#### Exercise 10
+
+Check if the the flipper length of female penguins is different from the male ones.
+Don't forget to first check for normality!
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE, fig.show='hide', include= FALSE}
+#subset the data
+male_female <- penguins |> 
+  filter(sex %in% c("male","female"), !is.na(flipper_length_mm))
+#perform an exploratory analysis
+summary(male_female)
+#check for data normality
+#plot histogram of values with different bin sizes
+ggplot(aes(x=flipper_length_mm), data = male_female) +
+  geom_histogram() +
+  facet_wrap(~sex)
+
+# The distribution does not look like a normal curve
+
+#Q-Q plots
+male_female |>
+  ggplot(aes(sample = flipper_length_mm )) + 
+  geom_qq() +
+  geom_qq_line(colour ='darkred') +
+  facet_wrap(~sex)
+
+# Q-Q plots do not follow a line
+
+#perform Levene's test
+library(rstatix)
+# check for equality of variance with Levene's test
+male_female |> levene_test(flipper_length_mm ~ sex) 
+
+# p < 0.05, which means that the variances are significantly different
+
+
+## It seems that for this comparison we need to use a non-parametric test. Let's do a Mann-Whitney!
+
+wilcox.test(male_female$flipper_length_mm ~ male_female$sex)
+
+
+# We can conclude that females' flip length is different from the males one.
+```
+
+<br>
+
+What happens when we are comparing between more than 2 groups?
+For parametric testing, we would perform one-way analysis of variance (ANOVA), which we will not cover during this workshop.
+For non-parametric test, we will use the Kruskal-Wallis test.
+For instance, let's see if the bill length is significantly different between islands:
+
+```{r}
+kruskal.test(penguins$bill_length_mm ~ penguins$island)
+```
+
+<br>Since the p-value is \< 0.05, we can conclude that the bill length of penguins is significantly different depending on the islands.
+We can visualise the data as well:
+
+```{r}
+penguins |>
+  ggplot(aes(x = island,
+             y = bill_length_mm)) +
+  geom_boxplot(aes(fill = island)) +
+  scale_fill_brewer(palette = "Set1") +
+  labs(title = "Bill length by island", x = "Island", y = "Bill length (mm)") +
+  theme_bw()
+
+```
+
+#### Exercise 11
+
+Using a non-parametric test, determine if the flipper length is significantly between the three species.
+Either using the base `boxplot` function or using `ggplot2`, draw a boxplot to visualise the data.
+
+*When you are ready to see the answer, click on the "Code" button on the right below this.*
+
+```{r, class.source = 'fold-hide', collapse=TRUE, include= FALSE}
+kruskal.test(penguins$flipper_length_mm ~ penguins$species)
+
+boxplot(penguins$flipper_length_mm ~ penguins$species, xlab = "Species", ylab = "Flipper length (mm)", main = "Flipper length by species", col = c("darkorange","purple","cyan4"))
+```
+
+$$
+\\[1cm]
+$$
+
+### 4.5. When do you use which test?
+
+The following table will help you to decide which statistical test to use based on your data:
+
+```{r,echo=FALSE, collapse=TRUE, message=FALSE}
+library(huxtable)
+
+ht = hux(
+  "n  of Groups to compare" = c("Two (unpaired)","Two (paired)","Three or more"),
+  "Parametric Test" = c("Un-paired t-test", "Paired t-test", "One way Analysis of Variance"),
+  "Non-parametric test" = c("Mann-Whitney", "Wilcoxon Rank sum", "Kruskal-Wallis"),
+  add_colnames = TRUE
+)
+
+bold(ht)[1,]           <- TRUE
+bottom_border(ht)[1,]  <- 0.4
+align(ht)[,2]          <- "right"
+right_padding(ht)      <- 10
+left_padding(ht)       <- 10
+width(ht)              <- 0.35
+number_format(ht)      <- 2
+
+ht
+```
+
+$$
+\\[3cm]
+$$
