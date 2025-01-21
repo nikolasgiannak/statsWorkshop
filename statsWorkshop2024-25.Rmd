@@ -1145,7 +1145,7 @@ Either using the base `boxplot` function or using `ggplot2`, draw a boxplot to v
 
 *When you are ready to see the answer, click on the "Code" button on the right below this.*
 
-```{r, class.source = 'fold-hide', collapse=TRUE, include= FALSE}
+```{r, class.source = 'fold-hide', collapse=TRUE, include= TRUE}
 kruskal.test(penguins$flipper_length_mm ~ penguins$species)
 
 boxplot(penguins$flipper_length_mm ~ penguins$species, xlab = "Species", ylab = "Flipper length (mm)", main = "Flipper length by species", col = c("darkorange","purple","cyan4"))
