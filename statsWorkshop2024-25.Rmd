@@ -341,6 +341,7 @@ install.packages("ggplot2")
 install.packages("palmerpenguins")
 install.packages("FactoMineR")
 install.packages("hrbrthemes")
+devtools::install_github("kassambara/factoextra")
 ```
 
 <br>This will install these packages on your computer. They need to be loaded with `library()` to be usable in the R session:
