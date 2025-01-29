@@ -351,6 +351,8 @@ library(tidyr)
 library(palmerpenguins)
 library(ggplot2)
 library(FactoMineR)
+library(cowplot)
+library(factoextra)
 ```
 
 $$
