@@ -84,6 +84,7 @@ The console of R can be used as a basic calculator. For example, we can type the
 sqrt(125)
 exp(10)
 log10(1000)
+log2(8)
 ```
 
 #### Exercise 1
