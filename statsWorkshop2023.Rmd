@@ -1168,7 +1168,7 @@ pheatmap(expr.data, color = colorRampPalette(rev(brewer.pal(n=10, name="RdBu")))
 ```
   
   
-  
-  
+  library(RColorBrewer)
+  display.brewer.all()
   
   
