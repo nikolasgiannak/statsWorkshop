@@ -895,6 +895,37 @@ z-value is the value we want to calculate.
 <br> Additionally, we use the pheatmap package, which is commonly used between researchers when they publish their work. 
 <br> A 3rd package, which is used for more complicated heatmaps is the following : ComplexHeatmap
 
+```{r, collapse= FALSE, include = TRUE}
+library(pheatmap)
+library(RColorBrewer)
+expr.data <- read.table("RNAseqData.csv", sep = ",", header = T)
+# expr.data <- read.table("<PATH_to_RNAseqData/RNAseqData.csv", sep = ",", header = T)
+rownames(expr.data) = expr.data[,1]
+# This is a comment
+# expr.data  =as.matrix(expr.data[,-1])
+expr.data = as.matrix(expr.data[,2:ncol(expr.data)])
+heatmap(expr.data, scale = "none")
+heatmap(expr.data, scale = "row")
+
+pheatmap(expr.data, fontsize_row = 5)
+
+pheatmap(expr.data, color = colorRampPalette(rev(brewer.pal(n=10, name = "RdBu"))) (100),
+         border_color = "grey90",
+         scale = "row",
+         cellwidth = 20,
+         cellheight = 5,
+         cluster_rows = TRUE,
+         cluster_columns = TRUE,
+         show_colnames = TRUE,
+         show_rownames = TRUE,
+         fontsize_row = 5,
+         fontsize_col = 10,
+         fontsize = 10, 
+         na_col = "black",
+         legend = TRUE)
+
+```
+
 ## Module 4: Distributions and statistical tests
 
 ### 4.1. Data preparation to compare group means
