@@ -943,7 +943,14 @@ ggdraw() +
 ```
 <br>
 
+#### B. Manhattan plots
+They are scatterplots, widely used in GWAS (Genome Wide Association Study). Every point is associated with a genetic variant. The x-axis shows the position of the variant on a chromosome, while the y-axis displays the level of its association with a trait.
 
+```{r, collapse= TRUE, include = TRUE, echo = FALSE}
+ggdraw() + 
+  draw_image("images/image-manhattan.jpg", width = 1) 
+```
+<br>
 ## Module 4: Distributions and statistical tests
 
 ### 4.1. Data preparation to compare group means
