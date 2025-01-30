@@ -1313,3 +1313,260 @@ ht
 $$
 \\[3cm]
 $$
+
+
+## Module 5: Dimensionality Reduction and Clustering
+
+### 5.1. Principal Component Analysis
+
+PCA (Principal Component Analysis) is a dimensionality-reduction method, which is used to reduce the dimensionality of very large datasets.
+<br> It transforms a large set of variables in to a smaller one that retains most of the information of a complex dataset.
+
+```{r, class.source = 'fold-hide', collapse=TRUE, include= TRUE}
+penguins <- read.table("penguins.csv",sep = ",", header = T)
+penguins <- na.omit(penguins)
+#subset data with numerical values to be used in the PCA analysis.
+# One way to do this, is by using the subset function
+PCA.data <-  subset(penguins, select = c("bill_length_mm","bill_depth_mm","flipper_length_mm" ,"body_mass_g"))
+
+#another way to do  it is by using the dplyr package
+library(dplyr)
+PCA.dplyr <- penguins |> select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
+
+#Next step is to remove any NA values
+#PCA.data = na.omit(PCA.data)
+PCA.dplyr <- na.omit(PCA.dplyr)
+
+#next we will perform the PCA analysis using the prcomp function, and summarise the results
+PCA.results <- prcomp(PCA.data, center = TRUE, scale = TRUE)
+summary(PCA.results)
+plot(PCA.results)
+biplot(PCA.results)
+plot(PCA.results$x[,1], PCA.results$x[,2])
+#plot results
+library(ggfortify)
+autoplot(PCA.results)
+autoplot(PCA.results, data = penguins, colour = 'species')
+         
+#another way to perform the PCA analysis is by using functions from the factorextra and factorminer packages
+#install.packages("factoextra")
+#library(factoextra)
+library(FactoMineR)
+PCA.results2 <- PCA(PCA.data, graph = T)
+
+fviz_screeplot(PCA.results2)
+```
+
+$$
+\\[1cm]
+$$
+
+### 5.2. What is clustering?
+
+Consider clustering a task in which data points are divided into a number of groups such as the points of a group are more similar to each other than the ones that participate in different groups.
+<br> In other words, clustering seperates points/groups with similar attributes, from the ones that have different characteristics and assigns them into clusters.
+<br> Various types of clustering include:
+
+1.  Centroid-based clustering (k-means)
+
+2.  Density-based clustering
+
+3.  Distribution-based clustering
+
+4.  Hierarchical clustering
+<br>
+<br>
+<br>
+You can find more info about clustering at the companion presentation "clusteringMethods.pdf". There we focus on k-means and hierarchical clustering and visually explain it.
+<br> It is included in the material we have sent to you.
+$$
+\\[1cm]
+$$
+
+### 5.3. k-means clustering
+
+k-means clustering is considered one of the simplest clustering algorithms, that groups together certain data with a member of that certain group than with another group.
+"k" is the number of groups that we cluster our data points, while "mean" refers to the center of the data in that group.
+
+```{r}
+#prepare the data for which we want to perform the clustering
+#k.data = penguins |> na.omit(penguins) |> select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, species) |> scale()
+penguins.clean <- na.omit(penguins)
+
+#run k-means clustering for different k's and visualise it
+
+k3 <- kmeans(penguins.clean[,3:6], centers = 3)
+
+# put en extra column at the k.data, which will show the cluster it is assigned
+k3.penguinData <- data.frame(cluster = k3$cluster, penguins.clean)
+
+#In which cluster to the different species belong
+ggplot(k3.penguinData, aes(x = cluster)) +
+  geom_bar(aes(fill = species)) +
+  theme_bw()
+
+ggplot(k3.penguinData, aes(x = cluster)) +
+  geom_bar(aes(fill = island)) +
+  theme_bw()
+
+k2 <- kmeans(penguins.clean[,3:6], centers = 2)
+k4 <- kmeans(penguins.clean[,3:6], centers = 4)
+
+# we will use factoextra package to compute the ideal number of k  and visualize the clusters
+
+plot_k3 <- fviz_cluster(k3, geom = "point", data = penguins.clean[,3:6])
+plot_k2 <- fviz_cluster(k2, geom = "point", data = penguins.clean[,3:6])
+plot_k4 <-  fviz_cluster(k4, geom = "point", data = penguins.clean[,3:6])
+plot_k3
+plot_k2
+plot_k4
+
+
+#calculate the optimal number of k's
+# Elbow method
+fviz_nbclust(penguins.clean[,3:6], kmeans, method = "wss")
+# Silhouette
+fviz_nbclust(penguins.clean[,3:6], kmeans, method = "silhouette")
+
+```
+
+$$
+\\[1cm]
+$$
+
+### 5.4. Hierarchical clustering
+
+Hierarchical clustering is a technique that can be divided into two categories:
+
+1.  Agglomerative hierarchical clustering (commonly used)
+
+Here, iniatially data points are considered an individual cluster, and at each iteration, similar clusters (data points) are merged together with other similar clusters until one cluster remains.
+
+2.  Divisive hierarchical clustering
+
+Here, this technique considers all the data points a single cluster, and in each iteration, data points are seperated from the cluster, which are not similar.
+This is a procedure that continues till we are left with n number of clusters.
+
+To visualize hierarchical clustering, we use dendrograms, which are tree-like diagrams.
+In these, the sequences of merges or splits is recorded.
+
+```{r}
+#prepare our dataset, removing NA values
+penguins <- penguins |> filter(!is.na(bill_length_mm), !is.na(bill_depth_mm), !is.na(flipper_length_mm), !is.na(body_mass_g))
+
+#extract the trait( variable/ -s), which will be used for te hierarchical clustering
+pingu <- penguins |> select(bill_length_mm, body_mass_g)
+
+##scale data and compute a distance matrix for them
+pingu_scaled.distMatrix <- dist(scale(pingu))
+
+#we can use different linkage types
+complete.hclust <- hclust(pingu_scaled.distMatrix, method = "complete")
+average.hclust <- hclust(pingu_scaled.distMatrix, method = "average")
+
+plot(complete.hclust)
+plot(average.hclust, labels = penguins$species, cex =0.2)
+
+```
+
+$$
+\\[1cm]
+$$
+
+
+
+### 5.5. t-SNE and UMAP
+Dimension reduction helps to visualize high-dimensional datasets. To find and render visually meaningful patterns in genetic and genomic data, a researcher will likely turn to a class of statistical and computational tools for dimension reduction.
+<br>
+
+ t-distributed stochastic neighbor embedding (t-SNE) and uniform manifold approximation and projection (UMAP) are among the tools, in addition to PCA, that life scientists turn to for dimension reduction. While the scope of this workshop is not to teach you how to perform these 2 aforementioned techniques, we want you to be able to visually inspect outcome plots related to these.
+ <br>
+ 
+ t-SNE is an algorithm that takes a high-dimensional dataset (such as single-cell RNAseq data) and reduces it to a low-dimensional plot that retains  a lot of the original information. The many dimensions of the original dataset are the thousands of gene expression counts per cell from a scRNA sequencing experiment. This is reduced to a degree that each cell gets a location on a two or three-dimensional plot.
+ <br> 
+ 
+ Goal of t-SNE is to place similar cells together and different cells further apart based on their transcriptomic profile. 
+ <br>
+ 
+UMAP is an alternative to t-SNE. Here, the UMAP algorithm first learns the original dataset's manifold to calculate cell similarities. Then, it aims to capture these similarities in a low-dimensional plot. What is different is the mathematical approach to build the plot. 
+<br>
+Broadly speaking, t-SNE is more accurate in vizualizing similar cells, while UMAP more accurately represents the distances between clusters.
+
+Ref: https://www.scdiscoveries.com/blog/knowledge/what-is-t-sne-plot/
+
+```{r, collapse= TRUE, include = TRUE, echo = FALSE}
+ggdraw() + 
+  draw_image("images/image-tSNE.png", width = 1) 
+```
+
+$$
+\\[1cm]
+$$
+
+
+#### Exercise 12
+
+On the penguin dataset:
+
+1.  Create a dataset with only Adelie penguins, and keeping only body mass, flipper length and bill length
+
+2.  Run a PCA on this dataset and visualise the penguins and variables on the first 2 axis
+
+3.  Using the method of your choice, determine the optimal number of clusters
+
+4.  Using k-means, cluster the Adelie penguins
+
+5.  Perform adequate tests to compare the body mass and flipper length between your groups.
+
+6.  Draw boxplots illustrating the previous comparisons.
+getwd()
+```{r, include=TRUE, collapse= TRUE}
+setwd("/Users/nikolaosgiannakis/Desktop/R_course/AA_StatsWorkshop_2024_25")
+
+penguins <- read.table("penguins.csv",sep = ",", header = T)
+library(FactoMineR)
+library(factoextra)
+exerciseDataset <- subset(penguins, species=="Adelie")
+exerciseDataset <- exerciseDataset[,c("body_mass_g", "flipper_length_mm","bill_length_mm")]
+exerciseDataset <- na.omit(exerciseDataset)
+#install.packages("missMDA")
+library(missMDA)
+PCA.results2 = PCA(exerciseDataset, graph = T)
+
+# fviz_screeplot(PCA.results2)
+
+# Elbow method
+fviz_nbclust(exerciseDataset, kmeans, method = "wss")
+# Silhouette
+fviz_nbclust(exerciseDataset, kmeans, method = "silhouette")
+
+k2 <- kmeans(exerciseDataset, centers = 2)
+
+# exerciseDataset$cluster = as.character(k2$cluster)
+
+fviz_cluster(k2, data = exerciseDataset)
+
+exerciseDataset$cluster = as.character(k2$cluster)
+p1 <- ggplot(aes(x=body_mass_g), data = exerciseDataset) +
+  geom_histogram(binwidth = 200) +
+  facet_wrap(~cluster) +
+  theme_bw()
+p1
+p2 <- exerciseDataset |>
+  ggplot(aes(sample = body_mass_g )) + 
+  geom_qq() +
+  geom_qq_line(colour ='darkred') +
+  facet_wrap(~cluster) +
+  theme_bw()
+p2
+
+library(patchwork)
+p1|p2
+
+
+wilcox.test(exerciseDataset$body_mass_g ~ exerciseDataset$cluster)
+
+boxplot(exerciseDataset$body_mass_g ~ exerciseDataset$cluster, col = c("darkblue","darkred"), xlab = "cluster", ylab = "Body mass (g)")
+
+```
+
