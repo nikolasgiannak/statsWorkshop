@@ -1190,7 +1190,8 @@ In our example, in case we haven't performed a 'normality' check, we can perform
 wilcox.test(data_to_test$body_mass_g ~ data_to_test$species, paired = FALSE)
 # to perform an alternative to a paired t-test, use the Wilcoxon signed-rank test, also known as Wilcoxon-Whitney-Wilcoxon  test, where option paired = TRUE
 ```
-
+<br>
+The Mann–Whitney U test / Wilcoxon rank-sum test is not the same as the Wilcoxon signed-rank test, although both are nonparametric and involve summation of ranks. The Mann–Whitney U test is applied to independent samples. The Wilcoxon signed-rank test is applied to matched or dependent samples.
 $$
 \\[1cm]
 $$ <br>
@@ -1308,8 +1309,7 @@ number_format(ht)      <- 2
 ht
 ```
 
-<br>
-The Mann–Whitney U test / Wilcoxon rank-sum test is not the same as the Wilcoxon signed-rank test, although both are nonparametric and involve summation of ranks. The Mann–Whitney U test is applied to independent samples. The Wilcoxon signed-rank test is applied to matched or dependent samples.
+
 $$
 \\[3cm]
 $$
