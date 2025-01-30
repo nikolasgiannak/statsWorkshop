@@ -963,6 +963,19 @@ ggdraw() +
 $$
 \\[1cm]
 $$
+<br>
+
+### 3.6. Choose the right plot for your data
+<br>
+
+Ref: https://infogram.com/blog/choose-the-right-chart/
+
+```{r, collapse= TRUE, include = TRUE, echo = FALSE}
+ggdraw() + 
+  draw_image("images/image-chartType.png", width = 1) 
+```
+
+
 ## Module 4: Distributions and statistical tests
 
 ### 4.1. Data preparation to compare group means
