@@ -1094,15 +1094,31 @@ There are several types of t-test, which include:
 To compare the difference of means in more than 2 samples (3 and more), the parametric test used is the One way Analysis of Variance, but it will not be covered in this workshop.
 
 In our example, we can conclude that the data follow the normal distribution, therefore we will perform a parametric test to compare the mean value of the body mass in our two groups, Adelie and Gentoo penguins.
+<br> R's t.test() function perform's a Welch's t-test by default. A Welch's t-test does not assume equal variance. It should be used if there is any doubt about equal variance.
+<br> In R to perform a two-sample t-test, we need to add the option var.equal =TRUE
 <br>In base R we do the following:
 
 ```{r}
  t.test(data_to_test$body_mass_g ~ data_to_test$species)
+t.test(data_to_test$body_mass_g ~ data_to_test$species, var.equal = TRUE)
 ```
 
 <br>Using the dplyr package:
+Theory behind using t_test() function
+One-sample test
+:::::::::::::::::::::::::::::::::::::::::
+df %>% t_test(df$columnx ~ 1, mu = 0)
 
+
+Two-samples unpaired test
+:::::::::::::::::::::::::::::::::::::::::
+df %>% t_test(df$columnx ~ df$columny)
+
+Two-samples paired test
+:::::::::::::::::::::::::::::::::::::::::
+df %>% t_test (df$columnx ~ df$columny, paired = TRUE)
 ```{r}
+library(dplyr)
  data_to_test |>
    t_test(body_mass_g ~ species)
 ```
