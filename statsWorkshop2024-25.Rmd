@@ -1283,7 +1283,7 @@ $$
 \\[1cm]
 $$
 
-### 4.5. When do you use which test?
+### 4.5. When to use each test?
 
 The following table will help you to decide which statistical test to use based on your data:
 
