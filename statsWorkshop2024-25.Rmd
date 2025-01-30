@@ -926,6 +926,24 @@ pheatmap(expr.data, color = colorRampPalette(rev(brewer.pal(n=10, name = "RdBu")
 
 ```
 
+$$
+\\[1cm]
+$$
+
+### 3.5. Other graph types and their interpretation
+#### A. Volcano plots
+Volcano plots are commonly used graphs to show the results of omics experiments. They are used regularly in RNAseq experiments to diplay Differentially Expressed Genes (DEGs), as somebody can easily identify biologically significantly changing genes.
+<br> They are scatterplots that show statistical significance (p-val) vs magnitude of change (FC - Fold Change). Usually, The up-regulated genes are towards the right, while the down-regulated towards the left.
+
+```{r, collapse= TRUE, include = TRUE, echo = FALSE}
+ggdraw() + 
+  draw_image("images/image-volcano1.png", width = 0.33) + 
+  draw_image("images/image-VocanoPlot.svg", width = 0.33, x = 0.35) +
+  draw_image("images/image-VolcanoPlot_2.svg", width = 0.33, x = 0.7)
+```
+<br>
+
+
 ## Module 4: Distributions and statistical tests
 
 ### 4.1. Data preparation to compare group means
