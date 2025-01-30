@@ -975,6 +975,10 @@ ggdraw() +
   draw_image("images/image-chartType.png", width = 1) 
 ```
 
+$$
+\\[1cm]
+$$
+
 
 ## Module 4: Distributions and statistical tests
 
@@ -1012,13 +1016,15 @@ $$
 
 ### 4.2. The normal distribution
 
-![](images/image-1800502499.png)
+```{r, collapse= TRUE, include = TRUE, echo = FALSE}
+library(ggplot2)
+library(cowplot)
+ggdraw() + 
+  draw_image("images/image-1800502499.png", width = 0.5) + 
+  draw_image("images/image-1781426681.png", width = 0.5, x = 0.5, y = -0.05)
+ 
+```
 
-$$
-\\[1cm]
-$$
-
-![](images/image-1781426681.png)
 
 <br>How can we understand that our data follow the normal distribution as seen above?
 <br>Firstly, we can plot a histogram of our data to check how they look.
