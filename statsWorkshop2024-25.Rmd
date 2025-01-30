@@ -867,14 +867,33 @@ Add some labels and colors, and start the y axis at 0.
 ```{r, class.source = 'fold-hide', collapse=TRUE, include = FALSE}
 boxplot(penguins$bill_length_mm ~ penguins$sex, col = c("orange","lightgreen"), xlab = "Sex", ylab = "Bill length (mm)", main = "Bill length by sex", ylim = c(0,max(penguins$bill_length_mm,na.rm = TRUE)))
 ```
-
-
-
-
+<br>
 $$
 \\[1cm]
 $$
 
+### 3.4. Heatmaps
+
+Heatmaps are graphical representations of data, which use a color-code to represent their different values. Colour variation is analogous to the intensity of the data values,a nd they are used to visually inform the reader about a phenomenon. 
+<br> z-standarization is commonly used in heatmap generation.
+
+<br> What is data z-standarization?
+<br> It is a statistical procedure used to make data points from different datasets/samples comparable. In this procedure, each data point is converted into a z-score. A z-score indicates how many standard deviations a data point is from the mean of the dataset.
+
+<br> How do we calculate the z-score?
+
+```{r, echo=FALSE, out.width="50%", fig.cap="z-score calculation formula."}
+knitr::include_graphics("images/image-z-score_formula-cropped.jpg")
+```
+z-value is the value we want to calculate.
+<br> x is the observed value.
+<br> μ is the mean value of the samples (per row).
+<br> σ is the standard deviation of the sample.
+<br> Be cautious, as μ and σ are actually the mean and the standard deviation of the population, but in our case we have a limited number of samples. Please search online how somebody can estimate , under certain conditions, the mean and the standard deviation using a sample.
+
+<br> Here, you can see 2 ways to vizualize transcriptomic data, using standarization. Initially, we use the heatmap function from base R.
+<br> Additionally, we use the pheatmap package, which is commonly used between researchers when they publish their work. 
+<br> A 3rd package, which is used for more complicated heatmaps is the following : ComplexHeatmap
 
 ## Module 4: Distributions and statistical tests
 
