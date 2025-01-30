@@ -951,6 +951,18 @@ ggdraw() +
   draw_image("images/image-manhattan.jpg", width = 1) 
 ```
 <br>
+
+#### C. Venn diagrams
+Venn diagrams are widely used graphs that show the logical relation between sets. Became popular by John Venn (1834-1923). A Venn diagram shows all the possible logical relations between a finite collection of different sets. It is made of two or more circles that sometimes overlap.
+
+```{r, collapse= TRUE, include = TRUE, echo = FALSE}
+ggdraw() + 
+  draw_image("images/image-vennDiagram.png", width = 1) 
+```
+
+$$
+\\[1cm]
+$$
 ## Module 4: Distributions and statistical tests
 
 ### 4.1. Data preparation to compare group means
