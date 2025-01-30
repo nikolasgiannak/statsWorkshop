@@ -1173,10 +1173,11 @@ $$
 
 ### 4.4. Non-parametric tests and when we use them
 
-When our data are not "normal" (normally distributed), instead of a parametric test we use a non-parametric alternative.
+When our data are not "normal" (normally distributed), instead of a parametric test we could  use a non-parametric alternative.
 More specifically, a non-parametric test does not assume anything about the underlying distribution of our data.
 
 In our example, in case we haven't performed a 'normality' check, we can perform a Mann-Whitney U test, which is the non-parametric alternative to the unpaired t-test.
+
 
 ```{r}
 wilcox.test(data_to_test$body_mass_g ~ data_to_test$species, paired = FALSE)
@@ -1285,7 +1286,7 @@ library(huxtable)
 ht = hux(
   "n  of Groups to compare" = c("Two (unpaired)","Two (paired)","Three or more"),
   "Parametric Test" = c("Un-paired t-test", "Paired t-test", "One way Analysis of Variance"),
-  "Non-parametric test" = c("Mann-Whitney", "Wilcoxon Rank sum", "Kruskal-Wallis"),
+  "Non-parametric test" = c("Mann-Whitney U test, also known as Mann-Whitney-Wilcoxon", "Wilcoxon signed-rank test, also known asWilcoxon-Whitney-wilcoxon", "Kruskal-Wallis"),
   add_colnames = TRUE
 )
 
@@ -1294,12 +1295,14 @@ bottom_border(ht)[1,]  <- 0.4
 align(ht)[,2]          <- "right"
 right_padding(ht)      <- 10
 left_padding(ht)       <- 10
-width(ht)              <- 0.35
+width(ht)              <- 1
 number_format(ht)      <- 2
 
 ht
 ```
 
+<br>
+The Mann–Whitney U test / Wilcoxon rank-sum test is not the same as the Wilcoxon signed-rank test, although both are nonparametric and involve summation of ranks. The Mann–Whitney U test is applied to independent samples. The Wilcoxon signed-rank test is applied to matched or dependent samples.
 $$
 \\[3cm]
 $$
