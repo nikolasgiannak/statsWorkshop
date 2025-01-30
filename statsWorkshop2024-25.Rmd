@@ -1180,8 +1180,9 @@ In our example, in case we haven't performed a 'normality' check, we can perform
 
 
 ```{r}
+#performs a Mann-Whitney-Wilcoxon
 wilcox.test(data_to_test$body_mass_g ~ data_to_test$species, paired = FALSE)
-
+# to perform an alternative to a paired t-test, use the Wilcoxon signed-rank test, also known as Wilcoxon-Whitney-Wilcoxon  test, where option paired = TRUE
 ```
 
 $$
