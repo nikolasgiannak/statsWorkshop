@@ -1194,7 +1194,8 @@ wilcox.test(data_to_test$body_mass_g ~ data_to_test$species, paired = FALSE)
 The Mann–Whitney U test / Wilcoxon rank-sum test is not the same as the Wilcoxon signed-rank test, although both are nonparametric and involve summation of ranks. The Mann–Whitney U test is applied to independent samples. The Wilcoxon signed-rank test is applied to matched or dependent samples.
 $$
 \\[1cm]
-$$ <br>
+$$ 
+<br>
 
 #### Exercise 10
 
