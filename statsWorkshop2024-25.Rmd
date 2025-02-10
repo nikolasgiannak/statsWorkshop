@@ -7,9 +7,11 @@ output:
     toc: true
     toc_float: true
     code_folding: show
-lang: "en"
-editor_options: 
-  markdown: 
+  pdf_document:
+    toc: true
+lang: en
+editor_options:
+  markdown:
     wrap: sentence
 ---
   
@@ -342,6 +344,9 @@ install.packages("palmerpenguins")
 install.packages("FactoMineR")
 install.packages("hrbrthemes")
 devtools::install_github("kassambara/factoextra")
+install.packages("vcd")
+install.packages("epiR")
+install.packages("stats")
 ```
 
 <br>This will install these packages on your computer. They need to be loaded with `library()` to be usable in the R session:
@@ -883,6 +888,7 @@ Heatmaps are graphical representations of data, which use a color-code to repres
 <br> How do we calculate the z-score?
 
 ```{r, echo=FALSE, out.width="50%", fig.cap="z-score calculation formula."}
+
 knitr::include_graphics("images/image-z-score_formula-cropped.jpg")
 ```
 z-value is the value we want to calculate.
@@ -1110,19 +1116,30 @@ t.test(data_to_test$body_mass_g ~ data_to_test$species, var.equal = TRUE)
 ```
 
 <br>Using the dplyr package:
+<br>
 Theory behind using t_test() function
+<br>
 One-sample test
+<br>
 :::::::::::::::::::::::::::::::::::::::::
+<br>
 df %>% t_test(df$columnx ~ 1, mu = 0)
-
+<br>
 
 Two-samples unpaired test
+<br>
 :::::::::::::::::::::::::::::::::::::::::
+<br>
 df %>% t_test(df$columnx ~ df$columny)
+<br>
 
 Two-samples paired test
+<br>
 :::::::::::::::::::::::::::::::::::::::::
-df %>% t_test (df$columnx ~ df$columny, paired = TRUE)
+<br>
+df %>% t_test(df$columnx ~ df$columny, paired = TRUE)
+<br>
+
 ```{r}
 library(dplyr)
  data_to_test |>
@@ -1194,8 +1211,7 @@ wilcox.test(data_to_test$body_mass_g ~ data_to_test$species, paired = FALSE)
 The Mann–Whitney U test / Wilcoxon rank-sum test is not the same as the Wilcoxon signed-rank test, although both are nonparametric and involve summation of ranks. The Mann–Whitney U test is applied to independent samples. The Wilcoxon signed-rank test is applied to matched or dependent samples.
 $$
 \\[1cm]
-$$ 
-<br>
+$$ <br>
 
 #### Exercise 10
 
@@ -1314,6 +1330,71 @@ ht
 $$
 \\[3cm]
 $$
+
+### 4.6. Comparing frequencies and Forest plots
+
+Both the Chi-square test and Fisher’s Exact Test are statistical tests used to assess the association or independence between two categorical variables. They are commonly applied to contingency tables, particularly 2x2 tables, to test if the observed distribution of data is significantly different from what would be expected under the null hypothesis (no association between variables).
+
+The Chi-square test is used when the sample size is large, and expected cell frequencies are 5 or more. The Fisher’s Exact Test is used when the sample size is small or when expected frequencies are less than 5.
+
+```{r, collapse= TRUE, include = TRUE, echo = FALSE}
+library(ggplot2)
+library(cowplot)
+combinedPlots <- ggdraw() +
+  draw_image("images/image-Forest_Plot_1.png", width = 0.5) + 
+  draw_image("images/image-Forest_Plot_2.jpg", width = 0.5, x = 0.5, y = -0.05)
+
+# now add the title
+title <- ggdraw() + 
+  draw_label(
+    "Comparing categorical variables",
+    fontface = 'bold',
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(25, 0, 0, 7)
+  )
+plot_grid(
+  title, combinedPlots,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+)
+ 
+```
+
+```{r, class.source = 'fold-hide', collapse=TRUE, include= TRUE}
+
+# Loading the package
+library(vcd)
+library(epiR)
+library(stats)
+
+# Defining your 2x2 contingency table
+table <- matrix(c(15, 212, 25, 223), nrow = 2, dimnames = list(c("Event", "Non-Event"),  c("Intervention", "Control")))
+
+# Calculate Risk Ratio and CI 
+result <- epi.2by2(dat = table, method = "cohort.count", conf.level = 0.95)
+result
+
+# Executing Chi square test 
+chisq.test(table)
+
+# Executing Fisher's Exact Test
+fisher.test(table)
+
+```
+<br>
+
+$$
+\\[1cm]
+$$ <br>
+
+
+
 
 
 ## Module 5: Dimensionality Reduction and Clustering
@@ -1522,7 +1603,6 @@ On the penguin dataset:
 6.  Draw boxplots illustrating the previous comparisons.
 getwd()
 ```{r, include=TRUE, collapse= TRUE}
-setwd("/Users/nikolaosgiannakis/Desktop/R_course/AA_StatsWorkshop_2024_25")
 
 penguins <- read.table("penguins.csv",sep = ",", header = T)
 library(FactoMineR)
