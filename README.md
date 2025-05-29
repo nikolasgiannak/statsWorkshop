@@ -9,6 +9,11 @@ Easy way:
 2. Once the file is donwloaded, click on it. It open in your browser.
 3. Navigate though the file menu. Enjoy! Woohoo!
 
+   OR
+
+Less easy way:
+
+
 
 1. Click on the statsWorkshop2024-25.html
 2. On the righjt hand side of the screen on the download icon, press download file
