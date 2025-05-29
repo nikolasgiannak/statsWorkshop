@@ -4,4 +4,5 @@ Code, data and images for Statistics Workshop 2023, 2024, 2025 for 3rd yeaR biom
 
 To be able to see the html in the right format. foloow the steps:
 
-1. Click on the 
+1. Click on the statsWorkshop2024-25.html
+2. 
